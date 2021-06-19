@@ -48,94 +48,95 @@ add_child_mortality = function(is_child_mortality_needed, country){
   write_csv(path = paste0('DATA/children/', country,'_m.csv'),ddf) 
 }
 
-# # Multiple countries
-# process_children_mortality_update = function(){
-#   data = readxl::read_xlsx('data/NumberDeaths.xlsx', sheet = 2)
-#   names(data) = as.character(data[1,])
-#   data = data[6:nrow(data),]
-#   data = data %>% select(Location, Time, '0-4', '5-9', '10-14', '15-19') %>% filter(!is.na(Time))
-#   data_00 = data %>% filter(Time == '2000 - 2005')
-#   for (i in seq(2003, 2005)){
-#     data_00$Time = i
-#     data = rbind(data_00, data)
-#   }
-#   data_00 = data %>% filter(Time == '2005 - 2010')
-#   for (i in seq(2006, 2010)){
-#     data_00$Time = i
-#     data = rbind(data, data_00)
-#   }
-#   data_00 = data %>% filter(Time == '2010 - 2015')
-#   for (i in seq(2011, 2015)){
-#     data_00$Time = i
-#     data = rbind(data, data_00)
-#   }
-#   data_00 = data %>% filter(Time == '2015 - 2020')
-#   for (i in seq(2016, 2020)){
-#     data_00$Time = i
-#     data = rbind(data,data_00)
-#   }
-#   data = reshape2::melt(data, id.vars = c('Location', 'Time'), variable.name = 'age', value.name = 'value')
-#   setnames(data, 1:2, c('country', 'year'))
-#   data_pop = readxl::read_xlsx('data/fertility_update/pop.xlsx', sheet = 2)
-#   countries = as.character(unique(data$country))
-#   #countries[4] = 'Iran'
-#   names(data_pop) = as.character(data_pop[1,])
-#   # data (thousand)
-#   data_pop = as.data.table(data_pop) %>% 
-#     filter(Location %in% countries) %>% 
-#     select(Location, Time, Age, Female, Male)
-#   setnames(data_pop, 1:ncol(data_pop), c('country', 'year', 'age', 'Female', 'Male'))
-#   data_pop$pop = as.numeric(data_pop$Female) + as.numeric(data_pop$Male)
-#   
-#   data_pop$age = as.character(data_pop$age)
-#   data_pop = data_pop %>% filter(age %in% c('0-4', '5-9', '10-14', '15-19'))
-#   
-#   d_merge = merge(data_pop, data, by = c('year', 'age', 'country'))
-#   d_merge$mortality = as.numeric(d_merge$value)/d_merge$pop
-#   d_merge = d_merge %>% select(country, year, age, mortality)
-#   d_merge$country[which(d_merge$country == "Iran (Islamic Republic of)")] = 'Iran'
-#   write_csv(d_merge, path = 'data/children/mortality_rate_all.csv')
-# }
-# 
-# # Multiple countries
-# process_child_mortality = function(country, countries){
-#   # rate per children 
-#   if (country != "russian_federation"){
-#     child = read.csv(paste0('data/children/mortality_rate_all', '.csv'))
-#     child = child %>% filter(country == countries)
-#     
-#   }else{
-#     child = read.csv('data/children/mortality_rate_all_russain_federation.csv')
-#   }
-#   
-#   child_m_matrix = matrix(rep(0, 100*18), nrow = 100)
-#   
-#   child_m_matrix[49:15,1] = child$mortality[which(child$year == 2020 & child$age == '0-4')]
-#   child_m_matrix[50:16,2] = child$mortality[which(child$year == 2019 & child$age == '0-4')]
-#   child_m_matrix[51:17,3] = child$mortality[which(child$year == 2018 & child$age == '0-4')]
-#   child_m_matrix[52:18,4] = child$mortality[which(child$year == 2017 & child$age == '0-4')]
-#   child_m_matrix[53:19,5] = child$mortality[which(child$year == 2016 & child$age == '0-4')]
-#   child_m_matrix[54:20,6] = child$mortality[which(child$year == 2015 & child$age == '5-9')]
-#   child_m_matrix[55:21,7] = child$mortality[which(child$year == 2014 & child$age == '5-9')]
-#   child_m_matrix[56:22,8] = child$mortality[which(child$year == 2013 & child$age == '5-9')]
-#   child_m_matrix[57:23,9] = child$mortality[which(child$year == 2012 & child$age == '5-9')]
-#   child_m_matrix[58:24,10] = child$mortality[which(child$year == 2011 & child$age == '5-9')]
-#   child_m_matrix[59:25,11] = child$mortality[which(child$year == 2010 & child$age == '10-14')]
-#   child_m_matrix[60:26,12] = child$mortality[which(child$year == 2009 & child$age == '10-14')]
-#   child_m_matrix[61:27,13] = child$mortality[which(child$year == 2008 & child$age == '10-14')]
-#   child_m_matrix[62:28,14] = child$mortality[which(child$year == 2007 & child$age == '10-14')]
-#   child_m_matrix[63:29,15] = child$mortality[which(child$year == 2006 & child$age == '10-14')]
-#   child_m_matrix[64:30,16] = child$mortality[which(child$year == 2005 & child$age == '15-19')]
-#   child_m_matrix[65:31,17] = child$mortality[which(child$year == 2004 & child$age == '15-19')]
-#   child_m_matrix[66:32,18] = child$mortality[which(child$year == 2003 & child$age == '15-19')]
-#   
-#   
-#   
-#   child_m_matrix = as.data.frame(child_m_matrix)
-#   names(child_m_matrix) = paste0(seq(0:17)-1, 'years')
-#   
-#   write_csv(path = paste0('data/children/child_mortality_', country,'.csv'), child_m_matrix)
-# }  
+# Multiple countries 
+# finished
+process_children_mortality_update = function(){
+  data = readxl::read_xlsx('DATA/NumberDeaths.xlsx', sheet = 2)
+  names(data) = as.character(data[1,])
+  data = data[6:nrow(data),]
+  data = data %>% select(Location, Time, '0-4', '5-9', '10-14', '15-19') %>% filter(!is.na(Time))
+  data_00 = data %>% filter(Time == '2000 - 2005')
+  for (i in seq(2002, 2004)){
+    data_00$Time = i
+    data = rbind(data_00, data)
+  }
+  data_00 = data %>% filter(Time == '2005 - 2010')
+  for (i in seq(2005, 2009)){
+    data_00$Time = i
+    data = rbind(data, data_00)
+  }
+  data_00 = data %>% filter(Time == '2010 - 2015')
+  for (i in seq(2010, 2014)){
+    data_00$Time = i
+    data = rbind(data, data_00)
+  }
+  data_00 = data %>% filter(Time == '2015 - 2020')
+  for (i in seq(2015, 2019)){
+    data_00$Time = i
+    data = rbind(data,data_00)
+  }
+  data = reshape2::melt(data, id.vars = c('Location', 'Time'), variable.name = 'age', value.name = 'value')
+  setnames(data, 1:2, c('country', 'year'))
+  data_pop = readxl::read_xlsx('DATA/fertility_update/pop.xlsx', sheet = 2)
+  countries = as.character(unique(data$country))
+  #countries[4] = 'Iran'
+  names(data_pop) = as.character(data_pop[1,])
+  # data (thousand)
+  data_pop = as.data.table(data_pop) %>%
+    filter(Location %in% countries) %>%
+    select(Location, Time, Age, Female, Male)
+  setnames(data_pop, 1:ncol(data_pop), c('country', 'year', 'age', 'Female', 'Male'))
+  data_pop$pop = as.numeric(data_pop$Female) + as.numeric(data_pop$Male)
+
+  data_pop$age = as.character(data_pop$age)
+  data_pop = data_pop %>% filter(age %in% c('0-4', '5-9', '10-14', '15-19'))
+
+  d_merge = merge(data_pop, data, by = c('year', 'age', 'country'))
+  d_merge$mortality = as.numeric(d_merge$value)/d_merge$pop
+  d_merge = d_merge %>% select(country, year, age, mortality)
+  d_merge$country[which(d_merge$country == "Iran (Islamic Republic of)")] = 'Iran'
+  write_csv(d_merge, path = 'DATA/children/mortality_rate_all.csv')
+}
+
+# Multiple countries
+process_child_mortality = function(country, countries){
+  # rate per children
+  if (country != "russian_federation"){
+    child = read.csv(paste0('DATA/children/mortality_rate_all', '.csv'))
+    child = child %>% filter(country == countries)
+
+  }else{
+    child = read.csv('DATA/children/mortality_rate_all_russain_federation.csv')
+  }
+
+  child_m_matrix = matrix(rep(0, 100*18), nrow = 100)
+
+  child_m_matrix[49:15,1] = child$mortality[which(child$year == 2019 & child$age == '0-4')]
+  child_m_matrix[50:16,2] = child$mortality[which(child$year == 2018 & child$age == '0-4')]
+  child_m_matrix[51:17,3] = child$mortality[which(child$year == 2017 & child$age == '0-4')]
+  child_m_matrix[52:18,4] = child$mortality[which(child$year == 2016 & child$age == '0-4')]
+  child_m_matrix[53:19,5] = child$mortality[which(child$year == 2015 & child$age == '0-4')]
+  child_m_matrix[54:20,6] = child$mortality[which(child$year == 2014 & child$age == '5-9')]
+  child_m_matrix[55:21,7] = child$mortality[which(child$year == 2013 & child$age == '5-9')]
+  child_m_matrix[56:22,8] = child$mortality[which(child$year == 2012 & child$age == '5-9')]
+  child_m_matrix[57:23,9] = child$mortality[which(child$year == 2011 & child$age == '5-9')]
+  child_m_matrix[58:24,10] = child$mortality[which(child$year == 2010 & child$age == '5-9')]
+  child_m_matrix[59:25,11] = child$mortality[which(child$year == 2009 & child$age == '10-14')]
+  child_m_matrix[60:26,12] = child$mortality[which(child$year == 2008 & child$age == '10-14')]
+  child_m_matrix[61:27,13] = child$mortality[which(child$year == 2007 & child$age == '10-14')]
+  child_m_matrix[62:28,14] = child$mortality[which(child$year == 2006 & child$age == '10-14')]
+  child_m_matrix[63:29,15] = child$mortality[which(child$year == 2005 & child$age == '10-14')]
+  child_m_matrix[64:30,16] = child$mortality[which(child$year == 2004 & child$age == '15-19')]
+  child_m_matrix[65:31,17] = child$mortality[which(child$year == 2003 & child$age == '15-19')]
+  child_m_matrix[66:32,18] = child$mortality[which(child$year == 2002 & child$age == '15-19')]
+
+
+
+  child_m_matrix = as.data.frame(child_m_matrix)
+  names(child_m_matrix) = paste0(seq(0:17)-1, 'years')
+
+  write_csv(path = paste0('DATA/children/child_mortality_', country,'.csv'), child_m_matrix)
+}
 
 # England and Wales
 process_children_mortality_england_wales = function(){

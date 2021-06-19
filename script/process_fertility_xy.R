@@ -58,7 +58,7 @@ process_fertility_plots = function(country){
           strip.placement = "outside")
   ggsave(paste0("figures/fertility_",country, ".pdf"), width = 10, height = 4)
 }
-# 
+
 # # Process fertility data
 # process_fertility_all_countries = function(){
 #   all_combine = NaN
@@ -304,7 +304,7 @@ process_france_fertility = function(){
 
   data_combine_last = data_combine %>% filter(year == '2017')
   tmp = copy(data_combine_last)
-  for (i in seq(2018,2020)) {
+  for (i in seq(2018,2019)) {
     tmp$year = i
     data_combine = rbind(data_combine, tmp)
   }
@@ -319,7 +319,7 @@ process_france_fertility = function(){
   data = fread(unzip('DATA/afr.zip', files = 'IHME_GBD_2019_FERTILITY_1950_2019_ASFR_Y2020M10D27.CSV'))
   data = data %>% select(location_name, age_group_name, year_id, val)
   countries = c('France')
-  data = data %>% filter(location_name %in% countries & year_id %in% seq(2003, 2020))
+  data = data %>% filter(location_name %in% countries & year_id %in% seq(2002, 2019))
   data$age_group_name = as.character(data$age_group_name)
   data$age_group_name = gsub(' to ', '-', data$age_group_name)
   setnames(data, 1:4, c('country', 'age', 'date', 'afr'))
