@@ -188,27 +188,26 @@ process_orphans_england_wales = function(){
 
   write_csv(path = 'DATA/children/england_wales_orphans_all.csv', d_m1)
 ##############################################################################
-  p <- ggplot(d_m1, aes(x = age, y = orphans_2015, fill = gender)) +
+  p <- ggplot(d_m1, aes(x = age, y = orphans_2019, fill = gender)) +
     geom_bar(stat="identity", position=position_dodge()) +
     theme_bw() +
     theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))+
     #labs(x = 'Age of Parents', y = 'Fertility Rate per 1000 people')+
     xlab( 'Age of Parent') +
-    ylab('Number of Orphans in 2015')+
+    ylab('Number of Orphans in 2019')+
     guides(fill=guide_legend(title="Sex of Parent"))
-  #下一步考虑怎么把这个写成不同年份的，参考fertility，化成男女的图
   ggsave(filename = "figures/orphans_all_age_england_wales.pdf", p, width = 6, height = 5)
  ############################################################################################
-  p <- ggplot(d_m1, aes(x = age, y = d_m1[,9:13])) +
-    geom_point(stat="identity", position=position_dodge()) +
-    theme_bw() +
-    theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))+
-    #labs(x = 'Age of Parents', y = 'Fertility Rate per 1000 people')+
-    xlab( 'Age of Parent') +
-    ylab('Number of Orphans in 2015')+
-    guides(fill=guide_legend(title="Sex of Parent"))
+  # p <- ggplot(d_m1, aes(x = age, y = d_m1[,9:13])) +
+  #   geom_point(stat="identity", position=position_dodge()) +
+  #   theme_bw() +
+  #   theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))+
+  #   #labs(x = 'Age of Parents', y = 'Fertility Rate per 1000 people')+
+  #   xlab( 'Age of Parent') +
+  #   ylab('Number of Orphans in 2015')+
+  #   guides(fill=guide_legend(title="Sex of Parent"))
   
-  d_summary = d_m1 %>% select(age, gender, nb_covid19, nb_excess, deaths,  orphans)
+  d_summary = d_m1 %>% select(age, gender, nd_2015, nd_2016, nd_2017, nd_2018, nd_2019, orphans_2015, orphans_2016, orphans_2017, orphans_2018, orphans_2019)
   
   d_summary$age = ifelse(d_summary$age %in% c('00-04', '05-09', '10-14'), '0-14',
                          ifelse(d_summary$age %in% c('45-49','50-54', '55-59', '60-64'), '45-64',
