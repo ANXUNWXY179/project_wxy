@@ -79,7 +79,7 @@ process_children_mortality_update = function(){
   setnames(data, 1:2, c('country', 'year'))
   data_pop = readxl::read_xlsx('DATA/fertility_update/pop.xlsx', sheet = 2)
   countries = as.character(unique(data$country))
-  #countries[4] = 'Iran'
+  countries[4] = 'Iran'
   names(data_pop) = as.character(data_pop[1,])
   # data (thousand)
   data_pop = as.data.table(data_pop) %>%
@@ -103,7 +103,8 @@ process_child_mortality = function(country, countries){
   # rate per children
   if (country != "russian_federation"){
     child = read.csv(paste0('DATA/children/mortality_rate_all', '.csv'))
-    child = child %>% filter(country == countries)
+    #child = child %>% filter(country == countries)
+    child = child %>% filter(country == 'iran')
 
   }else{
     child = read.csv('DATA/children/mortality_rate_all_russain_federation.csv')

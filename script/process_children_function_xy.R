@@ -4732,12 +4732,11 @@ process_children_father_65_plus = function(country, data_f){
                           data_f$fertility_rate[which(data_f$age == "55-59" & data_f$date%in% seq(2013, 2017))] ,
                           data_f$fertility_rate[which(data_f$age == "60-64" & data_f$date %in% seq(2018,2019))])
   
-  
- 
+
   children[60, 18:1] <- c( data_f$fertility_rate[which(data_f$age == "40-44" & data_f$date %in% seq(2002, 2003))]  ,
                            data_f$fertility_rate[which(data_f$age == "45-49" & data_f$date %in% seq(2004, 2008))],
                            data_f$fertility_rate[which(data_f$age == "50-54" & data_f$date%in% seq(2009,2013))]  ,
-                           data_f$fertility_rate[which(data_f$age == "55-59" & data_f$date%in% seq(2014, 2019))] ,
+                           data_f$fertility_rate[which(data_f$age == "55-59" & data_f$date%in% seq(2014, 2018))] ,
                            data_f$fertility_rate[which(data_f$age == "60-64" & data_f$date == 2019)])
 
   children[59, 18:1] <- c( data_f$fertility_rate[which(data_f$age == "40-44" & data_f$date %in% seq(2002, 2004))]  ,

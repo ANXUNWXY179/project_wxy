@@ -11,6 +11,8 @@ process_fertility_plots = function(country){
     names(data_combine)[which(names(data_combine) == 'rate')] = "fertility_rate"
   }else{
     data_father = read.csv(paste0('DATA/fertility/', country, '_fertility_m_all.csv'))
+    #data_father = read.csv(paste0('DATA/fertility/iran_fertility_m_all.csv'))
+    #print(data_father)
     #setnames(data_father, c("country", "age",  "date","fertility_rate", "gender"))
     data_mother = read.csv(paste0('DATA/fertility/', country, '_fertility_f.csv'))
     data_mother$gender = 'Female'
@@ -29,11 +31,13 @@ process_fertility_plots = function(country){
       data_combine$fertility_rate = data_combine$fertility_rate * 1000
 
     } else {
-      if (country == "iran"){
-        names(data_father) = c("age", "year", "gender", "fertility_rate")
-      }
+      # if (country == "iran"){
+      #   names(data_father) = c("age", "year", "gender", "fertility_rate")
+      # }
+      
       data_father = data_father %>% select(year, age, gender, fertility_rate)
-      data_mother$year = data_mother$date
+      
+      #data_mother$year = data_mother$date
 
       data_mother = data_mother %>% select(year, age, gender, fertility_rate)
       #setnames(data_mother, 'afr', 'fertility_rate')
@@ -57,67 +61,68 @@ process_fertility_plots = function(country){
     theme(strip.background = element_blank(),
           strip.placement = "outside")
   ggsave(paste0("figures/fertility_",country, ".pdf"), width = 10, height = 4)
+  #ggsave(paste0("figures/fertility_iran.pdf"), width = 10, height = 4)
 }
 
 # # Process fertility data
-# process_fertility_all_countries = function(){
-#   all_combine = NaN
-#   list_file = list.files('data/fertility_update', '.json')
-#   list_file = sort(list_file, decreasing = TRUE)
-#   for (name_file in list_file)
-#   {
-#     year = strsplit(name_file, '_')[[1]][1]
-#     table_name = strsplit(strsplit(name_file, '_')[[1]][2], '.json')[[1]][1]
-#     json_data = suppressWarnings(fromJSON(paste(readLines(paste0('data/fertility_update/',name_file)))))
-#     data = as.data.table(unlist(json_data))
-#     data$country = names(json_data)
-#     setnames(data, 1, 'idx')
-#     dataset = readxl::read_xls(paste0('data/fertility_update/', strsplit(name_file, '.json')[[1]][1],'.xls'), sheet = 1)
-#     if (name_file %in% c( '2003_10.json', '2004_10.json')){
-#       dataset = as.data.table(dataset[,c(1,3)])
-#       names(dataset) = c('age', 'value')
-#       cat('\n===>process', year, 'table', table_name)
-#       tmp = NaN
-#       for (i in 1:nrow(data)){
-#         df = dataset[data[[1]][i]: (data[[1]][i]+11),]
-#         df$date = dataset[data[[1]][i]-1,1]
-#         df = df[-(1:2),]
-#         df$country = data[[2]][i]
-#         tmp = rbind(tmp, df ,fill = TRUE)
-#       }
-#       tmp$age = gsub(' -', '-', tmp$age)
-#     } else{
-#       dataset =  as.data.table(dataset[,1:2])
-#       names(dataset) = c('age', 'value')
-#       cat('\n===>process', year, 'table', table_name)
-#       tmp = NaN
-#       for (i in 1:nrow(data)){
-#         df = dataset[data[[1]][i]: (data[[1]][i]+13),]
-#         df$date = strsplit(df[[1]][1], ' ')[[1]][1]
-#         df = df[-(1:2),]
-#         df$country = data[[2]][i]
-#         tmp = rbind(tmp, df ,fill = TRUE)
-#       }
-#     }
-# 
-#     tmp = tmp[-1,]
-#     tmp = tmp %>% select(country, date, age, value)
-#     tmp$gender = ifelse(table_name == '10', 'Female','Male')
-#     tmp$age = unlist(lapply(tmp$age, function(x) strsplit(x, '\\.')[[1]][1]))
-#     all_combine = rbind(all_combine, tmp, fill = TRUE)
-#     cat('\n ===> processed', year, 'table', table_name)
-#   }
-#   all_combine = all_combine[-1,]
-#   all_combine = all_combine %>% select(-x)%>% unique() %>% arrange(country, date, age, desc(gender))
-#   all_combine = all_combine[which(all_combine$date >= '2003'),]
-#   all_combine$date = as.character(all_combine$date)
-#   all_combine$date = gsub('[*]', '',all_combine$date)
-#   all_combine = all_combine %>% filter(!is.na(date), !is.na(value))
-#   all_combine = all_combine %>% arrange(country, date, gender, age)
-#   all_combine = all_combine %>% distinct(country, date, age,gender, .keep_all = TRUE)
-#   setnames(all_combine, 'date', 'year')
-#   write_csv(path = "data/fertility_update/parents_live_births.csv", all_combine)
-# }
+process_fertility_all_countries = function(){
+  all_combine = NaN
+  list_file = list.files('DATA/fertility_update', '.json')
+  list_file = sort(list_file, decreasing = TRUE)
+  for (name_file in list_file)
+  {
+    year = strsplit(name_file, '_')[[1]][1]
+    table_name = strsplit(strsplit(name_file, '_')[[1]][2], '.json')[[1]][1]
+    json_data = suppressWarnings(fromJSON(paste(readLines(paste0('DATA/fertility_update/',name_file)))))
+    data = as.data.table(unlist(json_data))
+    data$country = names(json_data)
+    setnames(data, 1, 'idx')
+    dataset = readxl::read_xls(paste0('DATA/fertility_update/', strsplit(name_file, '.json')[[1]][1],'.xls'), sheet = 1)
+    if (name_file %in% c( '2003_10.json', '2004_10.json')){
+      dataset = as.data.table(dataset[,c(1,3)])
+      names(dataset) = c('age', 'value')
+      cat('\n===>process', year, 'table', table_name)
+      tmp = NaN
+      for (i in 1:nrow(data)){
+        df = dataset[data[[1]][i]: (data[[1]][i]+11),]
+        df$date = dataset[data[[1]][i]-1,1]
+        df = df[-(1:2),]
+        df$country = data[[2]][i]
+        tmp = rbind(tmp, df ,fill = TRUE)
+      }
+      tmp$age = gsub(' -', '-', tmp$age)
+    } else{
+      dataset =  as.data.table(dataset[,1:2])
+      names(dataset) = c('age', 'value')
+      cat('\n===>process', year, 'table', table_name)
+      tmp = NaN
+      for (i in 1:nrow(data)){
+        df = dataset[data[[1]][i]: (data[[1]][i]+13),]
+        df$date = strsplit(df[[1]][1], ' ')[[1]][1]
+        df = df[-(1:2),]
+        df$country = data[[2]][i]
+        tmp = rbind(tmp, df ,fill = TRUE)
+      }
+    }
+
+    tmp = tmp[-1,]
+    tmp = tmp %>% select(country, date, age, value)
+    tmp$gender = ifelse(table_name == '10', 'Female','Male')
+    tmp$age = unlist(lapply(tmp$age, function(x) strsplit(x, '\\.')[[1]][1]))
+    all_combine = rbind(all_combine, tmp, fill = TRUE)
+    cat('\n ===> processed', year, 'table', table_name)
+  }
+  all_combine = all_combine[-1,]
+  all_combine = all_combine %>% select(-x)%>% unique() %>% arrange(country, date, age, desc(gender))
+  all_combine = all_combine[which(all_combine$date >= '2002'),]
+  all_combine$date = as.character(all_combine$date)
+  all_combine$date = gsub('[*]', '',all_combine$date)
+  all_combine = all_combine %>% filter(!is.na(date), !is.na(value))
+  all_combine = all_combine %>% arrange(country, date, gender, age)
+  all_combine = all_combine %>% distinct(country, date, age,gender, .keep_all = TRUE)
+  setnames(all_combine, 'date', 'year')
+  write_csv(path = "DATA/fertility_update/parents_live_births.csv", all_combine)
+}
 
 # England and Wales
 process_england_wales_fertility = function(){
@@ -388,40 +393,40 @@ process_france_fertility = function(){
 #   ggsave("figures/compare_fertility_france.pdf", width = 7, height = 5)
 # }
 
-# # Germany
+# Germany
 # process_germany_fertility = function(){
-#   data_fertility = read.csv('data/fertility_update/parents_live_births.csv')
+#   data_fertility = read.csv('DATA/fertility_update/parents_live_births.csv')
 #   data_fertility = data_fertility %>% filter(country == 'Germany',
 #                                              age != 'Unknown - Inconnu',
 #                                              gender == 'Male')
-#   
-#   data_pop = readxl::read_xlsx('data/fertility_update/pop.xlsx', sheet = 2)
+# 
+#   data_pop = readxl::read_xlsx('DATA/fertility_update/pop.xlsx', sheet = 2)
 #   countries = c('Germany')
 #   names(data_pop) = as.character(data_pop[1,])
 #   # data (thousand)
 #   data_pop = as.data.table(data_pop) %>% filter(Location %in% countries) %>% select(Location, Time, Age, Female, Male)
 #   setnames(data_pop, 1:ncol(data_pop), c('country', 'year', 'age', 'Female', 'Male'))
 #   data_pop =  reshape2::melt(data_pop, id.vars = c('country', 'year', 'age'), variable.name =  'gender', value.name = 'pop')
-#   data_pop = as.data.table(data_pop %>% filter(gender == 'Male'))  
+#   data_pop = as.data.table(data_pop %>% filter(gender == 'Male',year != '2020'))
 #   #data_pop = data_pop %>% filter(age %in% c('0-4', '5-9', '10-14', '15-19', '20-24', '25-29',
-#   #                                          '30-34', '35-39', '40-44', 
+#   #                                          '30-34', '35-39', '40-44',
 #   #                                          '45-49', '50-54'))
-#   
+# 
 #   data_pop$age = as.character(data_pop$age)
 #   `%notin%` = Negate(`%in%`)
 #   data_pop = data_pop %>% filter(age %notin% c('0-4', '5-9', '10-14'))
-#   data_pop$age = ifelse(data_pop$age %in% c( '65-69', '70-74', '75-79', 
+#   data_pop$age = ifelse(data_pop$age %in% c( '65-69', '70-74', '75-79',
 #                                              '80-84', '85-89', '90-94', '95-99', '100+'), '65+', data_pop$age)
-#   
+# 
 #   data_pop$pop = as.numeric(data_pop$pop)
 #   data_pop = data_pop %>% group_by(age, year) %>% mutate(pop = sum(pop)) %>% ungroup() %>% distinct()
 #   ## population * 1000
-#   
+# 
 #   data_fertility = as.data.table(data_fertility)
 #   data_fertility$age = as.character(data_fertility$age)
 #   data_fertility$age = gsub(' - ', '-', data_fertility$age)
 #   data_fertility$age = gsub(' [+]', '+', data_fertility$age)
-#   
+# 
 #   # assume male are able to birth from 15 years old
 #   data_fertility$age = ifelse(data_fertility$age == '0-19', '15-19', data_fertility$age)
 #   data_fertility$year = as.character(data_fertility$year)
@@ -429,14 +434,14 @@ process_france_fertility = function(){
 #   data_combine= merge(data_fertility, data_pop, by = c('country','year', 'age', 'gender'))
 #   data_combine[,fertility_rate := value / (pop)]
 #   # live births per 1000 male
-#   write_csv(path = 'data/fertility/germany_fertility_m.csv', data_combine)
-#   data_combine = read.csv('data/fertility/germany_fertility_m.csv')
+#   write_csv(path = 'DATA/fertility/germany_fertility_m.csv', data_combine)
+#   data_combine = read.csv('DATA/fertility/germany_fertility_m.csv')
 #   data_combine$year = as.character(data_combine$year)
 #   ggplot(data_combine) +
 #     geom_point(aes(x = age, y = fertility_rate, color = year)) +
 #     theme_bw()+
 #     theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
-#   
+# 
 #   data_combine_first = data_combine %>% filter(year == '2007')
 #   tmp = copy(data_combine_first)
 #   for (i in seq(2002,2006)) {
@@ -449,26 +454,26 @@ process_france_fertility = function(){
 #     tmp$year = i
 #     data_combine = rbind(tmp, data_combine)
 #   }
-#   
-#   
+# 
+# 
 #   data_combine_last = data_combine %>% filter(year == '2015')
 #   tmp = copy(data_combine_last)
-#   for (i in seq(2016,2020)) {
+#   for (i in seq(2016,2019)) {
 #     tmp$year = i
 #     data_combine = rbind(data_combine, tmp)
 #   }
-#   
-#   
+# 
+# 
 #   data_combine = data_combine %>% arrange(year, age)
-#   write_csv(path = 'data/fertility/germany_fertility_m_all.csv', data_combine)
-#   
+#   write_csv(path = 'DATA/fertility/germany_fertility_m_all.csv', data_combine)
+# 
 #   # from IHME get the female fertility rates
 #   #url = 'http://ghdx.healthdata.org/sites/default/files/record-attached-files/IHME_GBD_2019_FERTILITY_1950_2019_ASFR_0.zip'
 #   #download.file(url, 'data/afr.zip')
 #   data = fread(unzip('data/afr.zip', files = 'IHME_GBD_2019_FERTILITY_1950_2019_ASFR_Y2020M10D27.CSV'))
 #   data = data %>% select(location_name, age_group_name, year_id, val)
 #   countries = c('Germany')
-#   data = data %>% filter(location_name %in% countries & year_id %in% seq(2003, 2020))
+#   data = data %>% filter(location_name %in% countries & year_id %in% seq(2002, 2019))
 #   data$age_group_name = as.character(data$age_group_name)
 #   data$age_group_name = gsub(' to ', '-', data$age_group_name)
 #   setnames(data, 1:4, c('country', 'age', 'date', 'afr'))
@@ -476,149 +481,153 @@ process_france_fertility = function(){
 #   data = data %>% filter(age != '10-14')
 #   d_rate_ihme = copy(data)
 #   d_rate_ihme$fertility_rate = d_rate_ihme$afr * 1000
-#   
-#   write_csv(path = 'data/fertility/germany_fertility_f.csv', d_rate_ihme)
+# 
+#   write_csv(path = 'DATA/fertility/germany_fertility_f.csv', d_rate_ihme)
 # }
 # 
 # # Iran
-# process_iran_fertility = function(){
-#   # from IHME get the female fertility rates
-#   #url = 'http://ghdx.healthdata.org/sites/default/files/record-attached-files/IHME_GBD_2019_FERTILITY_1950_2019_ASFR_0.zip'
-#   #download.file(url, 'data/afr.zip')
-#   data = fread(unzip('data/afr.zip', files = 'IHME_GBD_2019_FERTILITY_1950_2019_ASFR_Y2020M10D27.CSV'))
-#   data = data %>% select(location_name, age_group_name, year_id, val)
-#   countries = c('Iran (Islamic Republic of)')
-#   data = data %>% filter(location_name %in% countries & year_id %in% seq(2003, 2020))
-#   data$age_group_name = as.character(data$age_group_name)
-#   data$age_group_name = gsub(' to ', '-', data$age_group_name)
-#   setnames(data, 1:4, c('country', 'age', 'date', 'afr'))
-#   data$gender = 'Female'
-#   data = data %>% filter(age != '10-14')
-#   d_rate_ihme = copy(data)
-#   d_rate_ihme$fertility_rate = d_rate_ihme$afr * 1000
-#   
-#   write_csv(path = 'data/fertility/iran_fertility_f.csv', d_rate_ihme)
-#   
-#   iran <- select(d_rate_ihme, age, date, gender, fertility_rate)
-#   
-#   iran$age <- rep(c("20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55+"), each = 17)
-#   iran = rbind(iran, data.frame(age = rep("15-19", 17),
-#                                 date = c("2003", "2004","2005", "2006", "2007", "2008", "2009", 
-#                                          "2010", "2011", "2012", "2013", "2014", "2015", "2016", 
-#                                          "2017", "2018", "2019"),
-#                                     gender = rep("Male", 17),
-#                                    fertility_rate = rep(0, 17)))
-#   
-#   #iran = rbind(iran, data.frame(age = rep("55+", 17),
-#   #                              date = c("2003", "2004","2005", "2006", "2007", "2008", "2009", 
-#   #                                       "2010", "2011", "2012", "2013", "2014", "2015", "2016", 
-#   #                                       "2017", "2018", "2019"),
-#   #                              gender = rep("Male", 17),
-#   #                              fertility_rate = rep(0, 17)))
-#   
-#   tmp <- iran[which(iran$date == "2019"),]
-#   tmp$date <- rep("2020", length(tmp$date))
-#   m_iran <- rbind(iran, tmp)
-#   
-#   write_csv(path = 'data/fertility/iran_fertility_m_all.csv', m_iran)
-#   
-#   ggplot() + 
-#     geom_point(data = d_rate_ihme %>% filter(date == 2015), aes(age, fertility_rate), col = "pink") + 
-#     geom_point(data = m_iran %>% filter(date == 2015), aes(age, fertility_rate), col = "blue")
+process_iran_fertility = function(){
+  # from IHME get the female fertility rates
+  #url = 'http://ghdx.healthdata.org/sites/default/files/record-attached-files/IHME_GBD_2019_FERTILITY_1950_2019_ASFR_0.zip'
+  #download.file(url, 'data/afr.zip')
+  data = fread(unzip('DATA/afr.zip', files = 'IHME_GBD_2019_FERTILITY_1950_2019_ASFR_Y2020M10D27.CSV'))
+  data = data %>% select(location_name, age_group_name, year_id, val)
+  countries = c('Iran (Islamic Republic of)')
+  data = data %>% filter(location_name %in% countries & year_id %in% seq(2002, 2019))
+  data$age_group_name = as.character(data$age_group_name)
+  data$age_group_name = gsub(' to ', '-', data$age_group_name)
+  setnames(data, 1:4, c('country', 'age', 'date', 'afr'))
+  data$gender = 'Female'
+  data = data %>% filter(age != '10-14')
+  d_rate_ihme = copy(data)
+  d_rate_ihme$fertility_rate = d_rate_ihme$afr * 1000
+  names(d_rate_ihme) <- c('country', 'age', 'year', 'afr','gender','fertility_rate')
+
+  write_csv(path = 'DATA/fertility/iran_fertility_f.csv', d_rate_ihme)
+
+  iran <- select(d_rate_ihme, age, year, gender, fertility_rate)
+
+  iran$age <- rep(c("20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55+"), each = 18)
+  iran = rbind(iran, data.frame(age = rep("15-19", 18),
+                                year = c('2002',"2003", "2004","2005", "2006", "2007", "2008", "2009",
+                                         "2010", "2011", "2012", "2013", "2014", "2015", "2016",
+                                         "2017", "2018", "2019"),
+                                    gender = rep("Male", 18),
+                                   fertility_rate = rep(0, 18)))
+  
+  iran[,'gender'] = 'Male'
+  #names(iran)<-c('age','year','gender','fertility_rate')
+
+  #iran = rbind(iran, data.frame(age = rep("55+", 17),
+  #                              date = c("2003", "2004","2005", "2006", "2007", "2008", "2009",
+  #                                       "2010", "2011", "2012", "2013", "2014", "2015", "2016",
+  #                                       "2017", "2018", "2019"),
+  #                              gender = rep("Male", 17),
+  #                              fertility_rate = rep(0, 17)))
+
+  # tmp <- iran[which(iran$date == "2019"),]
+  # tmp$date <- rep("2020", length(tmp$date))
+  # m_iran <- rbind(iran, tmp)
+
+  write_csv(path = 'DATA/fertility/iran_fertility_m_all.csv', iran)
+
+  ggplot() +
+    geom_point(data = d_rate_ihme %>% filter(year == 2015), aes(age, fertility_rate), col = "pink") +
+    geom_point(data = iran %>% filter(year == 2015), aes(age, fertility_rate), col = "blue")
+
+}
 # 
-# }
-# 
-# # Italy
-# process_italy_fertility = function(){
-#   data_fertility = read.csv('data/fertility_update/parents_live_births.csv')
-#   data_fertility = data_fertility %>% filter(country == 'Italy',
-#                                              age != 'Unknown - Inconnu',
-#                                              gender == 'Male')
-#   
-#   data_pop = readxl::read_xlsx('data/pop.xlsx', sheet = 2)
-#   countries = c('Italy')
-#   names(data_pop) = as.character(data_pop[1,])
-#   # data (thousand)
-#   data_pop = as.data.table(data_pop) %>% filter(Location %in% countries) %>% select(Location, Time, Age, Female, Male)
-#   setnames(data_pop, 1:ncol(data_pop), c('country', 'year', 'age', 'Female', 'Male'))
-#   data_pop =  reshape2::melt(data_pop, id.vars = c('country', 'year', 'age'), variable.name =  'gender', value.name = 'pop')
-#   data_pop = as.data.table(data_pop %>% filter(gender == 'Male'))  
-#   
-#   data_pop$age = as.character(data_pop$age)
-#   `%notin%` = Negate(`%in%`)
-#   data_pop = data_pop %>% filter(age %notin% c('0-4', '5-9', '10-14'))
-#   data_pop$age = ifelse(data_pop$age %in% c( '65-69', '70-74', '75-79', 
-#                                              '80-84', '85-89', '90-94', '95-99', '100+'), '65+', data_pop$age)
-#   
-#   data_pop$pop = as.numeric(data_pop$pop)
-#   data_pop = data_pop %>% group_by(age, year) %>% mutate(pop = sum(pop)) %>% ungroup() %>% distinct()
-#   
-#   ## population * 1000
-#   
-#   data_fertility = as.data.table(data_fertility)
-#   data_fertility$age = as.character(data_fertility$age)
-#   data_fertility$age = gsub(' - ', '-', data_fertility$age)
-#   data_fertility$age = gsub(' [+]', '+', data_fertility$age)
-#   
-#   data_fertility = data_fertility %>% filter(year != '2006')
-#   data_fertility$value = gsub('-', '0', data_fertility$value)
-#   # assume male are able to birth from 15 years old
-#   data_fertility$age = ifelse(data_fertility$age == '0-19', '15-19', data_fertility$age)
-#   data_fertility$year = as.character(data_fertility$year)
-#   data_fertility$value = as.numeric(as.character(data_fertility$value))
-#   data_fertility = as.data.table(data_fertility)
-#   data_combine= merge(data_fertility, data_pop, by = c('country','year', 'age', 'gender'))
-#   data_combine[,fertility_rate := value / (pop)]
-#   # live births per 1000 male
-#   write_csv(path = 'data/fertility/italy_fertility_m.csv', data_combine)
-#   
-#   data_combine = read.csv('data/fertility/italy_fertility_m.csv')
-#   data_combine$year = as.character(data_combine$year)
-#   ggplot(data_combine) +
-#     geom_point(aes(x = age, y = fertility_rate, color = year)) +
-#     theme_bw()+
-#     theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
-#   
-#   data_combine_first = data_combine %>% filter(year == '2007')
-#   tmp = copy(data_combine_first)
-#   for (i in seq(2002,2006)) {
-#     tmp$year = i
-#     data_combine = rbind(tmp, data_combine)
-#   }
-#   data_combine_mid = data_combine %>% filter(year == '2011')
-#   data_combine_mid$year = '2012'
-#   data_combine = rbind(data_combine_mid, data_combine)
-#   data_combine_mid = data_combine %>% filter(year == '2014')
-#   data_combine_mid$year = '2015'
-#   data_combine = rbind(data_combine_mid, data_combine)
-#   
-#   data_combine_last = data_combine %>% filter(year == '2017')
-#   tmp = copy(data_combine_last)
-#   for (i in seq(2018,2020)) {
-#     tmp$year = i
-#     data_combine = rbind(data_combine, tmp)
-#   }
-#   
-#   data_combine = data_combine %>% arrange(year, age)
-#   write_csv(path = 'data/fertility/italy_fertility_m_all.csv', data_combine)
-#   
-#   # from IHME get the female fertility rates
-#   #url = 'http://ghdx.healthdata.org/sites/default/files/record-attached-files/IHME_GBD_2019_FERTILITY_1950_2019_ASFR_0.zip'
-#   #download.file(url, 'data/afr.zip')
-#   data = fread(unzip('data/afr.zip', files = 'IHME_GBD_2019_FERTILITY_1950_2019_ASFR_Y2020M10D27.CSV'))
-#   data = data %>% select(location_name, age_group_name, year_id, val)
-#   countries = c('Italy')
-#   data = data %>% filter(location_name %in% countries & year_id %in% seq(2003, 2020))
-#   data$age_group_name = as.character(data$age_group_name)
-#   data$age_group_name = gsub(' to ', '-', data$age_group_name)
-#   setnames(data, 1:4, c('country', 'age', 'date', 'afr'))
-#   data$gender = 'Female'
-#   data = data %>% filter(age != '10-14')
-#   d_rate_ihme = copy(data)
-#   d_rate_ihme$fertility_rate = d_rate_ihme$afr * 1000
-#   
-#   write_csv(path = 'data/fertility/italy_fertility_f.csv', d_rate_ihme)
-# }
+# Italy
+process_italy_fertility = function(){
+  data_fertility = read.csv('DATA/fertility_update/parents_live_births.csv')
+  data_fertility = data_fertility %>% filter(country == 'Italy',
+                                             age != 'Unknown - Inconnu',
+                                             gender == 'Male')
+
+  data_pop = readxl::read_xlsx('DATA/pop.xlsx', sheet = 2)
+  countries = c('Italy')
+  names(data_pop) = as.character(data_pop[1,])
+  # data (thousand)
+  data_pop = as.data.table(data_pop) %>% filter(Location %in% countries) %>% select(Location, Time, Age, Female, Male)
+  setnames(data_pop, 1:ncol(data_pop), c('country', 'year', 'age', 'Female', 'Male'))
+  data_pop =  reshape2::melt(data_pop, id.vars = c('country', 'year', 'age'), variable.name =  'gender', value.name = 'pop')
+  data_pop = as.data.table(data_pop %>% filter(gender == 'Male'))
+
+  data_pop$age = as.character(data_pop$age)
+  `%notin%` = Negate(`%in%`)
+  data_pop = data_pop %>% filter(age %notin% c('0-4', '5-9', '10-14'))
+  data_pop$age = ifelse(data_pop$age %in% c( '65-69', '70-74', '75-79',
+                                             '80-84', '85-89', '90-94', '95-99', '100+'), '65+', data_pop$age)
+
+  data_pop$pop = as.numeric(data_pop$pop)
+  data_pop = data_pop %>% group_by(age, year) %>% mutate(pop = sum(pop)) %>% ungroup() %>% distinct()
+
+  ## population * 1000
+
+  data_fertility = as.data.table(data_fertility)
+  data_fertility$age = as.character(data_fertility$age)
+  data_fertility$age = gsub(' - ', '-', data_fertility$age)
+  data_fertility$age = gsub(' [+]', '+', data_fertility$age)
+
+  data_fertility = data_fertility %>% filter(year != '2006')
+  data_fertility$value = gsub('-', '0', data_fertility$value)
+  # assume male are able to birth from 15 years old
+  data_fertility$age = ifelse(data_fertility$age == '0-19', '15-19', data_fertility$age)
+  data_fertility$year = as.character(data_fertility$year)
+  data_fertility$value = as.numeric(as.character(data_fertility$value))
+  data_fertility = as.data.table(data_fertility)
+  data_combine= merge(data_fertility, data_pop, by = c('country','year', 'age', 'gender'))
+  data_combine[,fertility_rate := value / (pop)]
+  # live births per 1000 male
+  write_csv(path = 'DATA/fertility/italy_fertility_m.csv', data_combine)
+
+  data_combine = read.csv('DATA/fertility/italy_fertility_m.csv')
+  data_combine$year = as.character(data_combine$year)
+  ggplot(data_combine) +
+    geom_point(aes(x = age, y = fertility_rate, color = year)) +
+    theme_bw()+
+    theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
+
+  data_combine_first = data_combine %>% filter(year == '2007')
+  tmp = copy(data_combine_first)
+  for (i in seq(2002,2006)) {
+    tmp$year = i
+    data_combine = rbind(tmp, data_combine)
+  }
+  data_combine_mid = data_combine %>% filter(year == '2011')
+  data_combine_mid$year = '2012'
+  data_combine = rbind(data_combine_mid, data_combine)
+  data_combine_mid = data_combine %>% filter(year == '2014')
+  data_combine_mid$year = '2015'
+  data_combine = rbind(data_combine_mid, data_combine)
+
+  data_combine_last = data_combine %>% filter(year == '2017')
+  tmp = copy(data_combine_last)
+  for (i in seq(2018,2019)) {
+    tmp$year = i
+    data_combine = rbind(data_combine, tmp)
+  }
+
+  data_combine = data_combine %>% arrange(year, age)
+  write_csv(path = 'DATA/fertility/italy_fertility_m_all.csv', data_combine)
+
+  # from IHME get the female fertility rates
+  #url = 'http://ghdx.healthdata.org/sites/default/files/record-attached-files/IHME_GBD_2019_FERTILITY_1950_2019_ASFR_0.zip'
+  #download.file(url, 'data/afr.zip')
+  data = fread(unzip('DATA/afr.zip', files = 'IHME_GBD_2019_FERTILITY_1950_2019_ASFR_Y2020M10D27.CSV'))
+  data = data %>% select(location_name, age_group_name, year_id, val)
+  countries = c('Italy')
+  data = data %>% filter(location_name %in% countries & year_id %in% seq(2002, 2019))
+  data$age_group_name = as.character(data$age_group_name)
+  data$age_group_name = gsub(' to ', '-', data$age_group_name)
+  setnames(data, 1:4, c('country', 'age', 'date', 'afr'))
+  data$gender = 'Female'
+  data = data %>% filter(age != '10-14')
+  d_rate_ihme = copy(data)
+  d_rate_ihme$fertility_rate = d_rate_ihme$afr * 1000
+
+  write_csv(path = 'DATA/fertility/italy_fertility_f.csv', d_rate_ihme)
+}
 # 
 # # Mexico
 # process_mexico_fertility = function(){

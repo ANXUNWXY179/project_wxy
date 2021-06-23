@@ -244,6 +244,16 @@ Brazil,2017,40 - 44,77923,Female
 Brazil,2017,45 - 49,4525,Female
 Brazil,2017,50 +,364,Female
 Brazil,2017,Unknown - Inconnu,11942,Female
+Brazil,Total,15  - 19,U,Female
+Brazil,Total,20  - 24,U,Female
+Brazil,Total,25  - 29,U,Female
+Brazil,Total,30  - 34,U,Female
+Brazil,Total,35  - 39,U,Female
+Brazil,Total,40  - 44,U,Female
+Brazil,Total,45  - 49,U,Female
+Brazil,Total,50+     ,U,Female
+Brazil,Total,Total   ,C,Female
+Brazil,Total,Unk,U,Female
 Colombia,2003,15 - 19,151346,Female
 Colombia,2003,20 - 24,212458,Female
 Colombia,2003,25 - 29,154340,Female
@@ -461,6 +471,24 @@ Colombia,2017,55 - 59,2236,Male
 Colombia,2017,60 - 64,867,Male
 Colombia,2017,65 +,368,Male
 Colombia,2017,Unknown - Inconnu,19382,Male
+Colombia,Total,15  - 19,U,Female
+Colombia,Total,20  - 24,U,Female
+Colombia,Total,25  - 29,U,Female
+Colombia,Total,30  - 34,U,Female
+Colombia,Total,35  - 39,U,Female
+Colombia,Total,40  - 44,U,Female
+Colombia,Total,45  - 49,U,Female
+Colombia,Total,50+     ,U,Female
+Colombia,Total,Total   ,U,Female
+Colombia,Total,Unk,U,Female
+France,2002,15 - 19,15218,Female
+France,2002,20 - 24,106917,Female
+France,2002,25 - 29,249785,Female
+France,2002,30 - 34,250567,Female
+France,2002,35 - 39,113302,Female
+France,2002,40 - 44,24603,Female
+France,2002,45 - 49,1155,Female
+France,2002,50+     ,40,Female
 France,2004,15 - 19,15181,Female
 France,2004,20 - 24,108885,Female
 France,2004,25 - 29,240057,Female
@@ -654,6 +682,16 @@ France,2017,50 - 54,10741,Male
 France,2017,55 - 59,3555,Male
 France,2017,60 - 64,1201,Male
 France,2017,65 +,137,Male
+France,Total,12  - 14,C,Female
+France,Total,15  - 19,C,Female
+France,Total,20  - 24,C,Female
+France,Total,25  - 29,C,Female
+France,Total,30  - 34,C,Female
+France,Total,35  - 39,C,Female
+France,Total,40  - 44,C,Female
+France,Total,45  - 49,C,Female
+France,Total,50+     ,C,Female
+France,Total,Total   ,C,Female
 Germany,2003,15 - 19,26546,Female
 Germany,2003,20 - 24,120894,Female
 Germany,2003,25 - 29,198749,Female
@@ -1120,6 +1158,16 @@ Italy,2017,55 - 59,1872,Male
 Italy,2017,60 - 64,547,Male
 Italy,2017,65 +,235,Male
 Italy,2017,Unknown - Inconnu,34285,Male
+Italy,Total,0  - 14,C,Female
+Italy,Total,15  - 19,C,Female
+Italy,Total,20  - 24,C,Female
+Italy,Total,25  - 29,C,Female
+Italy,Total,30  - 34,C,Female
+Italy,Total,35  - 39,C,Female
+Italy,Total,40  - 44,C,Female
+Italy,Total,45  - 49,C,Female
+Italy,Total,50+     ,C,Female
+Italy,Total,Total   ,C,Female
 Kenya,2009,0 - 14,3877,Female
 Kenya,2009,15 - 19,89664,Female
 Kenya,2009,20 - 24,221828,Female
@@ -1729,6 +1777,24 @@ South Africa,2017,40 - 44,30318,Female
 South Africa,2017,45 - 49,2122,Female
 South Africa,2017,50 +,155,Female
 South Africa,2017,Unknown - Inconnu,8325,Female
+South Africa,Total,15  - 19,|,Female
+South Africa,Total,20  - 24,U,Female
+South Africa,Total,25  - 29,U,Female
+South Africa,Total,30  - 34,U,Female
+South Africa,Total,35  - 39,U,Female
+South Africa,Total,40  - 44,U,Female
+South Africa,Total,45  - 49,U,Female
+South Africa,Total,50+     ,U,Female
+South Africa,Total,Total   ,|,Female
+South Africa,Total,Unk,U,Female
+Spain,2002,15 - 19,11745,Female
+Spain,2002,20 - 24,43027,Female
+Spain,2002,25 - 29,111537,Female
+Spain,2002,30 - 34,162267,Female
+Spain,2002,35 - 39,77838,Female
+Spain,2002,40 - 44,11751,Female
+Spain,2002,45 - 49,525,Female
+Spain,2002,50+     ,35,Female
 Spain,2003,15 - 19,12338,Female
 Spain,2003,20 - 24,43890,Female
 Spain,2003,25 - 29,115454,Female
@@ -1954,6 +2020,27 @@ Spain,2017,55 - 59,1190,Male
 Spain,2017,60 - 64,367,Male
 Spain,2017,65 +,139,Male
 Spain,2017,Unknown - Inconnu,12307,Male
+Spain,Total,12  - 14,C,Female
+Spain,Total,15  - 19,C,Female
+Spain,Total,20  - 24,C,Female
+Spain,Total,25  - 29,C,Female
+Spain,Total,30  - 34,C,Female
+Spain,Total,35  - 39,C,Female
+Spain,Total,40  - 44,C,Female
+Spain,Total,45  - 49,C,Female
+Spain,Total,50+     ,C,Female
+Spain,Total,Total   ,C,Female
+United Kingdom,2002,0 - 14,299,Female
+United Kingdom,2002,12 - 14,297,Female
+United Kingdom,2002,15 - 19,48865,Female
+United Kingdom,2002,20 - 24,123845,Female
+United Kingdom,2002,25 - 29,171852,Female
+United Kingdom,2002,30 - 34,203261,Female
+United Kingdom,2002,35 - 39,101379,Female
+United Kingdom,2002,40 - 44,18273,Female
+United Kingdom,2002,45 - 49,890,Female
+United Kingdom,2002,50 +,78,Female
+United Kingdom,2002,Unknown - Inconnu,35,Female
 United Kingdom,2003,15 - 19,49633,Female
 United Kingdom,2003,20 - 24,129867,Female
 United Kingdom,2003,25 - 29,175473,Female
@@ -2112,6 +2199,14 @@ United Kingdom,2017,55 - 59,2390,Male
 United Kingdom,2017,60 - 64,673,Male
 United Kingdom,2017,65 +,316,Male
 United Kingdom,2017,Unknown - Inconnu,38637,Male
+United Kingdom,Total,15  - 19,C,Female
+United Kingdom,Total,20  - 24,C,Female
+United Kingdom,Total,25  - 29,C,Female
+United Kingdom,Total,30  - 34,C,Female
+United Kingdom,Total,35  - 39,C,Female
+United Kingdom,Total,40  - 44,C,Female
+United Kingdom,Total,45  - 49,C,Female
+United Kingdom,Total,50+     ,C,Female
 United States of America,2004,0 - 14,6781,Female
 United States of America,2004,15 - 19,415262,Female
 United States of America,2004,20 - 24,1034454,Female

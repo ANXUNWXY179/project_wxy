@@ -237,60 +237,72 @@ process_orphans_england_wales = function(){
 }
 
 # # France
-# process_orphans_france = function(){
-#   d_deaths = read.csv('data/France/france_all.csv', stringsAsFactors = FALSE)
-#   d_merge = copy(d_deaths)
-# 
-#   d_children = read.csv(paste0('data/children/france_children.csv'), stringsAsFactors = FALSE)
-#   d_children$age = paste0((d_children$age)%/%10 * 10 ,'-',(d_children$age) %/% 10 *10+9)
-#   d_children$age = ifelse(d_children$age %in% c('90-99', '100-109'), '90+', d_children$age)
-#   d_children = d_children %>% group_by(age, gender) %>% mutate(nb_c = mean(children)) %>%
-#     select(-children) %>% ungroup()%>%distinct()
-#   d_merge$gender = as.character(d_merge$gender)
-#   d_children$gender = ifelse(d_children$gender == 'female', 'Female', 'Male')
-#   
-#   d_m1 = merge(d_merge, d_children, by = c('age', 'gender')) 
-#   d_m1 = as.data.table(d_m1)
-#   d_m1[, orphans := round(deaths * nb_c)]
-# 
-#   d_m1 = d_m1%>% arrange(age) 
-# 
-#   write_csv(path = paste0('data/children/france_orphans_all.csv'), d_m1)
-#   
-#   p <- ggplot(d_m1, aes(x = age, y = orphans, fill = gender)) +
-#     geom_bar(stat="identity", position=position_dodge()) +
-#     theme_bw()+
-#     theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))+
-#     xlab( 'Age of Parent') +
-#     ylab('Number of Orphans')+
-#     guides(fill=guide_legend(title="Sex of Parent"))
-#   ggsave(filename = "figures/orphans_all_age_france.pdf", p, width = 6, height = 5)
-#   
-#   d_summary = d_m1 %>% select(age, gender,
-#                               excess_deaths, covid_deaths, 
-#                               deaths, orphans)
-#   d_summary$age = as.character(d_summary$age)
-#   d_summary$age = ifelse(d_summary$age %in% c('70-79', '80-89', '90+'), '70+',
-#                          ifelse(d_summary$age %in% c('50-59','60-69'), '50-69',
-#                                 ifelse(d_summary$age %in% c('20-29', '30-39', '40-49'), '20-49','0-19')))
-#   d_summary = d_summary %>% group_by(age, gender) %>% 
-#     mutate(nb_excess = as.integer(round((sum(excess_deaths)))),
-#            nb_covid = as.integer(round((sum(covid_deaths)))),
-#           nb_deaths = as.integer(round((sum(deaths)))),
-#            nb_orphans = as.integer(round(sum(orphans)))) %>% 
-#     ungroup() %>% 
-#     select(-orphans, -deaths, -covid_deaths, -excess_deaths) %>%
-#     distinct()
-#   d_summary = select(d_summary, age, gender, nb_excess, nb_covid, nb_deaths, nb_orphans)
-#   write_csv(path = 'data/France/all_data.csv', d_summary)
-#   d_summary %>% filter(age != '0-19') %>% 
-#     group_by(gender) %>% 
-#     mutate(total_excess = round(sum(nb_excess)),
-#            total_covid19 = round(sum(nb_covid)),
-#            total_deaths= round(sum(nb_deaths)),
-#            orphans= round(sum(nb_orphans))) %>% 
-#     ungroup()
-# }
+process_orphans_france = function(){
+  # d_deaths = readxl::read_xlsx('DATA/France/france_all.xlsx')
+  d_deaths = read.csv('DATA/France/france_all.csv', stringsAsFactors = FALSE)# THOUSANDS
+  d_merge = data.frame(d_deaths)
+
+  d_children = read.csv(paste0('DATA/children/france_children.csv'), stringsAsFactors = FALSE)
+  
+  d_children$age = paste0(d_children$age%/%5 * 5,'-',d_children$age %/% 5 *5+4)
+  d_children$age = ifelse(d_children$age %in% c( '95-99','100-104'), '95+', d_children$age)
+  d_children = d_children %>% group_by(age, gender) %>% mutate(nb_c = mean(children)) %>%
+    select(-children) %>% ungroup()%>%distinct()
+  
+  
+  
+  # d_children$age = paste0((d_children$age)%/%10 * 10 ,'-',(d_children$age) %/% 10 *10+9)
+  # d_children$age = ifelse(d_children$age %in% c('90-99', '100-109'), '90+', d_children$age)
+  # d_children = d_children %>% group_by(age, gender) %>% mutate(nb_c = mean(children)) %>%
+  #   select(-children) %>% ungroup()%>%distinct()
+  d_merge$deaths_peryear = d_merge$X2015.2020/6  * 1000
+  d_merge$gender = as.character(d_merge$gender)
+  #d_children$gender = ifelse(d_children$gender == 'female', 'Female', 'Male')
+
+ 
+  d_m1 = merge(d_merge, d_children, by = c('age', 'gender'))
+  d_m1 = as.data.table(d_m1)
+  d_m1[, orphans := round(deaths_peryear * nb_c)]
+
+  d_m1 = d_m1%>% arrange(age)
+  
+  d_m1$age = factor(d_m1$age, levels = c('0-4','5-9','10-14','15-19','20-24',
+                                         '25-29', '30-34','35-39', '40-44','45-49',
+                                         '50-54','55-59','60-64','65-69',
+                                         '70-74','75-79', '80-84','85-89', 
+                                         '90-94','95+'))#not change the data, but plot it according to level's order
+
+  write_csv(path = paste0('DATA/children/france_orphans_all.csv'), d_m1)
+
+
+  p <- ggplot(d_m1, aes(x = age, y = orphans, fill = gender)) +
+    geom_bar(stat="identity", position=position_dodge()) +
+    theme_bw()+
+    theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))+
+    xlab( 'Age of Parent') +
+    ylab('Number of Orphans')+
+    guides(fill=guide_legend(title="Sex of Parent"))
+  ggsave(filename = "figures/orphans_all_age_france.pdf", p, width = 6, height = 5)
+ 
+  d_summary = d_m1 %>% select(age, gender, deaths_peryear, orphans)
+  d_summary$age = as.character(d_summary$age)
+  d_summary$age = ifelse(d_summary$age %in% c('70-74','75-79', '80-84','85-89', '90-94','95+'), '70+',
+                         ifelse(d_summary$age %in% c('50-54','55-59','60-64','65-69'), '50-69',
+                                ifelse(d_summary$age %in% c('20-24','25-29', '30-34','35-39', '40-44','45-49'), '20-49','0-19')))
+  d_summary = d_summary %>% group_by(age, gender) %>%
+    mutate(nb_deaths = as.integer(round((sum(deaths_peryear)))),
+           nb_orphans = as.integer(round(sum(orphans)))) %>%
+    ungroup() %>%
+    select(-orphans, -deaths_peryear) %>%
+    distinct()
+  d_summary = select(d_summary, age, gender,  nb_deaths, nb_orphans)
+  write_csv(path = 'DATA/France/all_data.csv', d_summary)
+  d_summary %>% filter(age != '0-19') %>%
+    group_by(gender) %>%
+    mutate(total_deaths= round(sum(nb_deaths)),
+           orphans= round(sum(nb_orphans))) %>%
+    ungroup()
+}
 # 
 # # Germany
 # process_orphans_germany = function(){
@@ -448,52 +460,55 @@ process_orphans_england_wales = function(){
 #            orphans= round( sum( nb_orphans))) %>% ungroup()
 # }
 # 
-# # Italy
-# process_orphans_italy = function(){
-#   d_merge = read.csv('data/Italy/italy_all.csv', stringsAsFactors = FALSE)
-#   d_children = read.csv(paste0('data/children/italy_children.csv'), stringsAsFactors = FALSE)
-#   d_children$age = paste0((d_children$age)%/%10 * 10 ,'-',(d_children$age) %/% 10 *10+9)
-#   d_children$age = ifelse(d_children$age %in% c('90-99', '100-109'), '90+', d_children$age)
-#   d_children = d_children %>% group_by(age, gender) %>% mutate(nb_c = mean(children)) %>%
-#     select(-children) %>% ungroup()%>%distinct()
-#   d_merge$gender = as.character(d_merge$gender)
-#   d_children$gender = ifelse(d_children$gender == 'female', 'Female', 'Male')
-#   
-#   d_m1 = merge(d_merge, d_children, by = c('age', 'gender')) 
-#   d_m1 = as.data.table(d_m1)
-#   d_m1[, orphans := round(deaths * nb_c)]
-#   d_m1 = d_m1%>% arrange(age) 
-#   write_csv(path = paste0('data/children/italy_orphans_all.csv'), d_m1)
-#   
-#   p <- ggplot(d_m1, aes(x = age, y = orphans, fill = gender)) +
-#     geom_bar(stat="identity", position=position_dodge()) +
-#     theme_bw()+
-#     theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))+
-#     xlab( 'Age of Parent') +
-#     ylab('Number of Orphans')+
-#     guides(fill=guide_legend(title="Sex of Parent"))
-#   ggsave(filename = "figures/orphans_all_age_italy.pdf", p, width = 6, height = 5)
-#   
-#   d_summary = d_m1 %>% 
-#     select(age, gender,excess_deaths, covid_deaths,deaths, orphans)
-#   d_summary$age = as.character(d_summary$age)
-#   d_summary$age = ifelse(d_summary$age %in% c('70-79', '80-89', '90+'), '70+',
-#                          ifelse(d_summary$age %in% c('50-59','60-69'), '50-69',
-#                                 ifelse(d_summary$age %in% c('20-29', '30-39', '40-49'), '20-49','0-19')))
-#   d_summary = d_summary %>% group_by(age, gender) %>% 
-#     mutate(nb_excess = round(sum(excess_deaths)),
-#            nb_covid = round(sum(covid_deaths)),
-#            max_deaths = as.integer(round((sum(deaths)))),
-#            nb_orphans = as.integer(round(sum(orphans)))) %>% ungroup() %>% 
-#     select(-orphans, -deaths, -covid_deaths, -excess_deaths) %>% 
-#     distinct()
-#   write_csv(path = 'data/Italy/all_data.csv', d_summary)
-#   d_summary %>% filter(age != '0-19') %>% group_by(gender) %>% 
-#     mutate(total_excess = sum(nb_excess),
-#            total_covid = sum(nb_covid),
-#            total_deaths= round(sum(max_deaths)),
-#            orphans= round( sum( nb_orphans))) %>% ungroup()
-# }
+# Italy
+process_orphans_italy = function(){
+  d_merge = read.csv('DATA/Italy/italy_all.csv', stringsAsFactors = FALSE)
+  d_children = read.csv(paste0('DATA/children/italy_children.csv'), stringsAsFactors = FALSE)
+  d_children$age = paste0(d_children$age%/%5 * 5,'-',d_children$age %/% 5 *5+4)
+  #d_children$age = paste0((d_children$age)%/%10 * 10 ,'-',(d_children$age) %/% 10 *10+9)
+  d_children$age = ifelse(d_children$age %in% c( '95-99','100-104'), '95+', d_children$age)
+  d_children = d_children %>% group_by(age, gender) %>% mutate(nb_c = mean(children)) %>%
+    select(-children) %>% ungroup()%>%distinct()
+  d_merge$gender = as.character(d_merge$gender)
+  d_children$gender = ifelse(d_children$gender == 'female', 'Female', 'Male')
+
+  d_m1 = merge(d_merge, d_children, by = c('age', 'gender'))
+  d_m1 = as.data.table(d_m1)
+  d_m1[, orphans := round(deaths_2018 * nb_c)]
+  d_m1 = d_m1%>% arrange(age)
+  write_csv(path = paste0('DATA/children/italy_orphans_all.csv'), d_m1)
+  
+  d_m1$age = factor(d_m1$age, levels = c('0-4','5-9','10-14','15-19','20-24',
+                                         '25-29', '30-34','35-39', '40-44','45-49',
+                                         '50-54','55-59','60-64','65-69',
+                                         '70-74','75-79', '80-84','85-89', 
+                                         '90-94','95+'))
+
+  p <- ggplot(d_m1, aes(x = age, y = orphans, fill = gender)) +
+    geom_bar(stat="identity", position=position_dodge()) +
+    theme_bw()+
+    theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))+
+    xlab( 'Age of Parent') +
+    ylab('Number of Orphans')+
+    guides(fill=guide_legend(title="Sex of Parent"))
+  ggsave(filename = "figures/orphans_all_age_italy.pdf", p, width = 6, height = 5)
+
+  d_summary = d_m1 %>%
+    select(age, gender,deaths_2018, orphans)
+  d_summary$age = as.character(d_summary$age)
+  d_summary$age = ifelse(d_summary$age %in% c('70-74','75-79', '80-84','85-89', '90-94','95+'), '70+',
+                         ifelse(d_summary$age %in% c('50-54','55-59','60-64','65-69'), '50-69',
+                                ifelse(d_summary$age %in% c('20-24','25-29', '30-34','35-39', '40-44','45-49'), '20-49','0-19')))
+  d_summary = d_summary %>% group_by(age, gender) %>%
+    mutate(max_deaths = as.integer(round((sum(deaths_2018)))),
+           nb_orphans = as.integer(round(sum(orphans)))) %>% ungroup() %>%
+    select(-orphans, -deaths_2018) %>%
+    distinct()
+  write_csv(path = 'DATA/Italy/all_data.csv', d_summary)
+  d_summary %>% filter(age != '0-19') %>% group_by(gender) %>%
+    mutate(total_deaths= round(sum(max_deaths)),
+           orphans= round( sum( nb_orphans))) %>% ungroup()
+}
 # 
 # # Kenya
 # process_orphans_kenya = function(){
