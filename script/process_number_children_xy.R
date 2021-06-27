@@ -705,38 +705,38 @@ process_number_children_italy <- function(){
 #   process_fertility_plots('russian_federation')
 # }
 # 
-# # Spain
-# process_number_children_spain <- function(){
-#   cat(sprintf("Processing Fertility rates\n"))
-#   process_spain_fertility()
-#   # child mortality
-#   cat(sprintf("Processing child mortality rates\n"))
-#   process_child_mortality('spain', 'Spain')
-#   
-#   # fathers
-#   cat(sprintf("Processing number of children of fathers\n"))
-#   data_f = read.csv(paste0('data/fertility/spain_fertility_m_all.csv'))
-#   data_f$fertility_rate <- data_f$fertility_rate/1000
-#   data_f$date = data_f$year
-#   data_f$age = as.character(data_f$age)
-#   process_children_father_65_plus("spain", data_f)
-#   is_child_mortality_needed = 1
-#   add_child_mortality(is_child_mortality_needed, "spain")
-#   
-#   # mothers
-#   cat(sprintf("Processing number of children of mothers\n"))
-#   data = read.csv(paste0('data/fertility/spain_fertility_f.csv'))
-#   data_f = copy(data)
-#   data_f$fertility_rate = data_f$fertility_rate/1000
-#   d_2019 = data_f[which(data_f$date == '2019'),]
-#   d_2020 = copy(d_2019)
-#   d_2020$date = '2020'
-#   data_f = rbind(data_f, d_2020)
-#   process_children_all("spain", is_child_mortality_needed, data_f)
-#   
-#   process_fertility_plots("spain")
-# }
-# 
+# Spain
+process_number_children_spain <- function(){
+  cat(sprintf("Processing Fertility rates\n"))
+  process_spain_fertility()
+  # child mortality
+  cat(sprintf("Processing child mortality rates\n"))
+  process_child_mortality('spain', 'Spain')
+
+  # fathers
+  cat(sprintf("Processing number of children of fathers\n"))
+  data_f = read.csv(paste0('DATA/fertility/spain_fertility_m_all.csv'))
+  data_f$fertility_rate <- data_f$fertility_rate/1000
+  data_f$date = data_f$year
+  data_f$age = as.character(data_f$age)
+  process_children_father_65_plus("spain", data_f)
+  is_child_mortality_needed = 1
+  add_child_mortality(is_child_mortality_needed, "spain")
+
+  # mothers
+  cat(sprintf("Processing number of children of mothers\n"))
+  data = read.csv(paste0('DATA/fertility/spain_fertility_f.csv'))
+  data_f = copy(data)
+  data_f$fertility_rate = data_f$fertility_rate/1000
+  # d_2019 = data_f[which(data_f$date == '2019'),]
+  # d_2020 = copy(d_2019)
+  # d_2020$date = '2020'
+  # data_f = rbind(data_f, d_2020)
+  process_children_all("spain", is_child_mortality_needed, data_f)
+
+  process_fertility_plots("spain")
+}
+
 # # South Africa
 # process_number_children_south_africa <- function(){
 #   # fathers
@@ -853,42 +853,42 @@ process_number_children_italy <- function(){
 #   
 # }
 # 
-# # USA
-# process_number_children_usa <- function(high_fertility = TRUE){
-#   cat(sprintf("Processing Fertility rates\n"))
-#   if (high_fertility == TRUE){
-#     process_usa_fertility()
-#   }else {
-#     process_usa_fertility_2()
-#   }
-# 
-#   # child mortality
-#   cat(sprintf("Processing child mortality rates\n"))
-#   process_child_mortality('usa', 'United States of America')
-#   
-#   # fathers
-#   cat(sprintf("Processing number of children of fathers\n"))
-#   data_f = read.csv(paste0('data/fertility/usa_fertility_m_all.csv'))
-#   data_f$fertility_rate <- data_f$fertility_rate/1000
-#   data_f$date = data_f$year
-#   data_f$age = as.character(data_f$age)
-#   process_children_father_55_plus("usa", data_f)
-#   is_child_mortality_needed = 1
-#   add_child_mortality(is_child_mortality_needed, "usa")
-#   
-#   # mothers
-#   cat(sprintf("Processing number of children of mothers\n"))
-#   data = read.csv(paste0('data/fertility/usa_fertility_f.csv'))
-#   data_f = copy(data)
-#   data_f$fertility_rate = data_f$fertility_rate/1000
-#   d_2019 = data_f[which(data_f$date == '2019'),]
-#   d_2020 = copy(d_2019)
-#   d_2020$date = '2020'
-#   data_f = rbind(data_f, d_2020)
-#   process_children_all("usa", is_child_mortality_needed, data_f)
-#   
-#   process_fertility_plots("usa")
-# }
+# USA
+process_number_children_usa <- function(high_fertility = TRUE){
+  cat(sprintf("Processing Fertility rates\n"))
+  if (high_fertility == TRUE){
+    process_usa_fertility()
+  }else {
+    process_usa_fertility_2()
+  }
+
+  # child mortality
+  cat(sprintf("Processing child mortality rates\n"))
+  process_child_mortality('usa', 'United States of America')
+
+  # fathers
+  cat(sprintf("Processing number of children of fathers\n"))
+  data_f = read.csv(paste0('DATA/fertility/usa_fertility_m_all.csv'))
+  data_f$fertility_rate <- data_f$fertility_rate/1000
+  data_f$date = data_f$year
+  data_f$age = as.character(data_f$age)
+  process_children_father_55_plus("usa", data_f)
+  is_child_mortality_needed = 1
+  add_child_mortality(is_child_mortality_needed, "usa")
+
+  # mothers
+  cat(sprintf("Processing number of children of mothers\n"))
+  data = read.csv(paste0('DATA/fertility/usa_fertility_f.csv'))
+  data_f = copy(data)
+  data_f$fertility_rate = data_f$fertility_rate/1000
+  # d_2019 = data_f[which(data_f$date == '2019'),]
+  # d_2020 = copy(d_2019)
+  # d_2020$date = '2020'
+  # data_f = rbind(data_f, d_2020)
+  process_children_all("usa", is_child_mortality_needed, data_f)
+
+  process_fertility_plots("usa")
+}
 # 
 # # Zimbabwe
 # process_number_children_zimbabwe<- function(){

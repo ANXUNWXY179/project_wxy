@@ -103,8 +103,9 @@ process_child_mortality = function(country, countries){
   # rate per children
   if (country != "russian_federation"){
     child = read.csv(paste0('DATA/children/mortality_rate_all', '.csv'))
-    #child = child %>% filter(country == countries)
-    child = child %>% filter(country == 'iran')
+    child = child %>% filter(country == countries)
+    
+    #child = child %>% filter(country == 'iran')
 
   }else{
     child = read.csv('DATA/children/mortality_rate_all_russain_federation.csv')
