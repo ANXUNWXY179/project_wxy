@@ -62,70 +62,68 @@ process_number_children_brazil <- function(){
   process_fertility_plots("brazil")
 }
 
-# # Colombia
-# process_number_children_colombia <- function(){
-#   # Calculate number of children from different aged fathers
-#   cat(sprintf("Processing number of children of fathers\n"))
-#   data = readRDS('data/Colombia/male_fertility.RDS')
-#   data$y2016 = data$y2015
-#   data$y2017 = data$y2015
-#   data$y2018 = data$y2015
-#   data$y2019 = data$y2015
-#   data$y2020 = data$y2015
-#   data = reshape2::melt(data, id.vars = c('ages'), 
-#                         variable.name = 'year', value.name = 'fertility_rate')
-#   setnames(data, 'ages', 'age')
-#   data$age = as.character(data$age)
-#   data$age = gsub('[(]', '', data$age)
-#   data$age = gsub('[]]', '', data$age)
-#   data$year = as.character(data$year)
-#   data$year = gsub('y', '', data$year)
-#   data$fertility_rate[which(is.na(data$fertility_rate))] = 0
-#   data$age = unlist(lapply(data$age,function(x){ ifelse(x != '80+', paste0(strsplit(x, '-')[[1]][1], '-', 
-#                                                                            as.numeric(strsplit(x, '-')[[1]][2])-1), x)}))
-#   data$fertility_rate[data$age == "80+"] = 0
-#   data_f = copy(data)
-#   data_f$date = data_f$year
-#   data_f$gender = 'M'
-#   
-#   data_summary = data %>% group_by(age) %>% mutate(rate = mean(fertility_rate)) %>%
-#     ungroup %>% select(-fertility_rate, -year) %>% distinct()
-# 
-#   write_csv(data_f, path = paste0('data/fertility/colombia_fertility_m_all.csv'))
-#   process_children_father_80_plus("colombia", data_f)
-#   is_child_mortality_needed = 0
-#   add_child_mortality(is_child_mortality_needed, 'colombia')
-#   
-#   # Calculate number of children from different aged mothers
-#   cat(sprintf("Processing number of children of mothers\n"))
-#   data = readRDS('data/Colombia/female_fertility.RDS')
-#   data$y2016 = data$y2015
-#   data$y2017 = data$y2015
-#   data$y2018 = data$y2015
-#   data$y2019 = data$y2015
-#   data$y2020 = data$y2015
-#   data = reshape2::melt(data, id.vars = c('ages'), 
-#                         variable.name = 'year', value.name = 'fertility_rate')
-#   setnames(data, 'ages', 'age')
-#   data$age = as.character(data$age)
-#   data$age = gsub('[(]', '', data$age)
-#   data$age = gsub('[]]', '', data$age)
-#   data$year = as.character(data$year)
-#   data$year = gsub('y', '', data$year)
-#   data = data %>% filter(!is.na(fertility_rate))
-#   data$age = unlist(lapply(data$age,function(x){ paste0(strsplit(x, '-')[[1]][1], '-', 
-#                                                         as.numeric(strsplit(x, '-')[[1]][2])-1)}))
-#   data_f = copy(data)
-#   data_f$date = data_f$year
-#   data_f$gender = 'F'
-#   write_csv(data_f, path = paste0('data/fertility/colombia_fertility_f.csv'))
-#   
-#   is_child_mortality_needed = 0
-#   process_children_all("colombia", is_child_mortality_needed, data_f)
-#   
-#   # Make fertility plots
-#   process_fertility_plots("colombia")
-# }
+# Colombia
+process_number_children_colombia <- function(){
+  # Calculate number of children from different aged fathers
+  cat(sprintf("Processing number of children of fathers\n"))
+  data = readRDS('DATA/Colombia/male_fertility.RDS')
+  data$y2016 = data$y2015
+  data$y2017 = data$y2015
+  data$y2018 = data$y2015
+  data$y2019 = data$y2015
+  data = reshape2::melt(data, id.vars = c('ages'),
+                        variable.name = 'year', value.name = 'fertility_rate')
+  setnames(data, 'ages', 'age')
+  data$age = as.character(data$age)
+  data$age = gsub('[(]', '', data$age)
+  data$age = gsub('[]]', '', data$age)
+  data$year = as.character(data$year)
+  data$year = gsub('y', '', data$year)
+  data$fertility_rate[which(is.na(data$fertility_rate))] = 0
+  data$age = unlist(lapply(data$age,function(x){ ifelse(x != '80+', paste0(strsplit(x, '-')[[1]][1], '-',
+                                                                           as.numeric(strsplit(x, '-')[[1]][2])-1), x)}))
+  data$fertility_rate[data$age == "80+"] = 0
+  data_f = copy(data)
+  data_f$date = data_f$year
+  data_f$gender = 'M'
+
+  data_summary = data %>% group_by(age) %>% mutate(rate = mean(fertility_rate)) %>%
+    ungroup %>% select(-fertility_rate, -year) %>% distinct()
+
+  write_csv(data_f, path = paste0('DATA/fertility/colombia_fertility_m_all.csv'))
+  process_children_father_80_plus("colombia", data_f)
+  is_child_mortality_needed = 0
+  add_child_mortality(is_child_mortality_needed, 'colombia')
+
+  # Calculate number of children from different aged mothers
+  cat(sprintf("Processing number of children of mothers\n"))
+  data = readRDS('DATA/Colombia/female_fertility.RDS')
+  data$y2016 = data$y2015
+  data$y2017 = data$y2015
+  data$y2018 = data$y2015
+  data$y2019 = data$y2015
+  data = reshape2::melt(data, id.vars = c('ages'),
+                        variable.name = 'year', value.name = 'fertility_rate')
+  setnames(data, 'ages', 'age')
+  data$age = as.character(data$age)
+  data$age = gsub('[(]', '', data$age)
+  data$age = gsub('[]]', '', data$age)
+  data$year = as.character(data$year)
+  data$year = gsub('y', '', data$year)
+  data = data %>% filter(!is.na(fertility_rate))
+  data$age = unlist(lapply(data$age,function(x){ paste0(strsplit(x, '-')[[1]][1], '-',
+                                                        as.numeric(strsplit(x, '-')[[1]][2])-1)}))
+  data_f = copy(data)
+  data_f$date = data_f$year
+  data_f$gender = 'F'
+  write_csv(data_f, path = paste0('DATA/fertility/colombia_fertility_f.csv'))
+
+  is_child_mortality_needed = 0
+  process_children_all("colombia", is_child_mortality_needed, data_f)
+
+  # Make fertility plots
+  process_fertility_plots("colombia")
+}
 
 # England and wales
 process_number_children_england_wales <- function(){
@@ -423,67 +421,65 @@ process_number_children_italy <- function(){
 # 
 #   process_fertility_plots("kenya")
 # }
-# 
-# # Malawi
-# process_number_children_malawi <- function(){
-#   # fathers
-#   cat(sprintf("Processing number of children of fathers\n"))
-#   
-#   data = readRDS('data/Malawi/male_fertility.RDS')
-#   data$y2016 = data$y2015
-#   data$y2017 = data$y2015
-#   data$y2018 = data$y2015
-#   data$y2019 = data$y2015
-#   data$y2020 = data$y2015
-#   data = reshape2::melt(data, id.vars = c('ages'), 
-#                         variable.name = 'year', value.name = 'fertility_rate')
-#   setnames(data, 'ages', 'age')
-#   data$age = as.character(data$age)
-#   data$age = gsub('[(]', '', data$age)
-#   data$age = gsub('[]]', '', data$age)
-#   data$year = as.character(data$year)
-#   data$year = gsub('y', '', data$year)
-#   data$fertility_rate[which(is.na(data$fertility_rate))] = 0
-#   data$age = unlist(lapply(data$age,function(x){ ifelse(x != '80+', paste0(strsplit(x, '-')[[1]][1], '-', 
-#                                                                            as.numeric(strsplit(x, '-')[[1]][2])-1), x)}))
-#   data$fertility_rate[data$age == "80+"] = 0
-#   data_f = copy(data)
-#   data_f$date = data_f$year
-#   data_f$gender = 'M'
-#   write_csv(data_f, path = paste0('data/fertility/malawi_fertility_m_all.csv'))
-#   process_children_father_80_plus("malawi", data_f)
-#   is_child_mortality_needed = 0
-#   add_child_mortality(is_child_mortality_needed, "malawi")
-#   
-#   # mothers
-#   cat(sprintf("Processing number of children of mothers\n"))
-#   data = readRDS('data/Malawi/female_fertility.RDS')
-#   data$y2016 = data$y2015
-#   data$y2017 = data$y2015
-#   data$y2018 = data$y2015
-#   data$y2019 = data$y2015
-#   data$y2020 = data$y2015
-#   data = reshape2::melt(data, id.vars = c('ages'), 
-#                         variable.name = 'year', value.name = 'fertility_rate')
-#   setnames(data, 'ages', 'age')
-#   data$age = as.character(data$age)
-#   data$age = gsub('[(]', '', data$age)
-#   data$age = gsub('[]]', '', data$age)
-#   data$year = as.character(data$year)
-#   data$year = gsub('y', '', data$year)
-#   data$fertility_rate[which(is.na(data$fertility_rate))] = 0
-#   data$age = unlist(lapply(data$age,function(x){ ifelse(x != '80+', paste0(strsplit(x, '-')[[1]][1], '-', 
-#                                                                            as.numeric(strsplit(x, '-')[[1]][2])-1), x)}))
-#   data_f = copy(data)
-#   data_f$date = data_f$year
-#   data_f$gender = 'F'
-#   write_csv(data_f, path = paste0('data/fertility/malawi_fertility_f.csv'))
-#   is_child_mortality_needed = 0
-#   process_children_all("malawi", is_child_mortality_needed, data_f)
-#   
-#   process_fertility_plots("malawi")
-#   
-# }
+
+# Malawi
+process_number_children_malawi <- function(){
+  # fathers
+  cat(sprintf("Processing number of children of fathers\n"))
+
+  data = readRDS('DATA/Malawi/male_fertility.RDS')
+  data$y2016 = data$y2015
+  data$y2017 = data$y2015
+  data$y2018 = data$y2015
+  data$y2019 = data$y2015
+  data = reshape2::melt(data, id.vars = c('ages'),
+                        variable.name = 'year', value.name = 'fertility_rate')
+  setnames(data, 'ages', 'age')
+  data$age = as.character(data$age)
+  data$age = gsub('[(]', '', data$age)
+  data$age = gsub('[]]', '', data$age)
+  data$year = as.character(data$year)
+  data$year = gsub('y', '', data$year)
+  data$fertility_rate[which(is.na(data$fertility_rate))] = 0
+  data$age = unlist(lapply(data$age,function(x){ ifelse(x != '80+', paste0(strsplit(x, '-')[[1]][1], '-',
+                                                                           as.numeric(strsplit(x, '-')[[1]][2])-1), x)}))
+  data$fertility_rate[data$age == "80+"] = 0
+  data_f = copy(data)
+  data_f$date = data_f$year
+  data_f$gender = 'M'
+  write_csv(data_f, path = paste0('DATA/fertility/malawi_fertility_m_all.csv'))
+  process_children_father_80_plus("malawi", data_f)
+  is_child_mortality_needed = 0
+  add_child_mortality(is_child_mortality_needed, "malawi")
+
+  # mothers
+  cat(sprintf("Processing number of children of mothers\n"))
+  data = readRDS('DATA/Malawi/female_fertility.RDS')
+  data$y2016 = data$y2015
+  data$y2017 = data$y2015
+  data$y2018 = data$y2015
+  data$y2019 = data$y2015
+  data = reshape2::melt(data, id.vars = c('ages'),
+                        variable.name = 'year', value.name = 'fertility_rate')
+  setnames(data, 'ages', 'age')
+  data$age = as.character(data$age)
+  data$age = gsub('[(]', '', data$age)
+  data$age = gsub('[]]', '', data$age)
+  data$year = as.character(data$year)
+  data$year = gsub('y', '', data$year)
+  data$fertility_rate[which(is.na(data$fertility_rate))] = 0
+  data$age = unlist(lapply(data$age,function(x){ ifelse(x != '80+', paste0(strsplit(x, '-')[[1]][1], '-',
+                                                                           as.numeric(strsplit(x, '-')[[1]][2])-1), x)}))
+  data_f = copy(data)
+  data_f$date = data_f$year
+  data_f$gender = 'F'
+  write_csv(data_f, path = paste0('DATA/fertility/malawi_fertility_f.csv'))
+  is_child_mortality_needed = 0
+  process_children_all("malawi", is_child_mortality_needed, data_f)
+
+  process_fertility_plots("malawi")
+
+}
 
 # Mexico
 process_number_children_mexico <- function(){
@@ -572,71 +568,69 @@ process_number_children_mexico <- function(){
 # 
 #   process_fertility_plots("nigeria")
 # }
-# 
-# # Peru
-# process_number_children_peru <- function(){
-#   # fathers
-#   cat(sprintf("Processing number of children of fathers\n"))
-#   data = readRDS('data/Peru/male_fertility.RDS')
-#   data$y2013 = data$y2012
-#   data$y2014 = data$y2012
-#   data$y2015 = data$y2012
-#   data$y2016 = data$y2015
-#   data$y2017 = data$y2016
-#   data$y2018 = data$y2016
-#   data$y2019 = data$y2016
-#   data$y2020 = data$y2016
-#   data = reshape2::melt(data, id.vars = c('ages'), 
-#                         variable.name = 'year', value.name = 'fertility_rate')
-#   setnames(data, 'ages', 'age')
-#   data$age = as.character(data$age)
-#   data$age = gsub('[(]', '', data$age)
-#   data$age = gsub('[]]', '', data$age)
-#   data$year = as.character(data$year)
-#   data$year = gsub('y', '', data$year)
-#   data$fertility_rate[which(is.na(data$fertility_rate))] = 0
-#   data$age = unlist(lapply(data$age,function(x){ ifelse(x != '80+', paste0(strsplit(x, '-')[[1]][1], '-', 
-#                                                                            as.numeric(strsplit(x, '-')[[1]][2])-1), x)}))
-#   data$fertility_rate[data$age == "80+"] = 0
-#   data_f = copy(data)
-#   data_f$date = data_f$year
-#   data_f$gender = 'M'  
-#   write_csv(data_f, path = paste0('data/fertility/peru_fertility_m_all.csv'))
-#   process_children_father_80_plus("peru", data_f)
-#   is_child_mortality_needed = 0
-#   add_child_mortality(is_child_mortality_needed, "peru")
-#   
-#   # mothers
-#   cat(sprintf("Processing number of children of mothers\n"))
-#   data = readRDS('data/Peru/female_fertility.RDS')
-#   data$y2013 = data$y2012
-#   data$y2014 = data$y2012
-#   data$y2015 = data$y2012
-#   data$y2016 = data$y2015
-#   data$y2017 = data$y2016
-#   data$y2018 = data$y2016
-#   data$y2019 = data$y2016
-#   data$y2020 = data$y2016
-#   data = reshape2::melt(data, id.vars = c('ages'), 
-#                         variable.name = 'year', value.name = 'fertility_rate')
-#   setnames(data, 'ages', 'age')
-#   data$age = as.character(data$age)
-#   data$age = gsub('[(]', '', data$age)
-#   data$age = gsub('[]]', '', data$age)
-#   data$year = as.character(data$year)
-#   data$year = gsub('y', '', data$year)
-#   data$fertility_rate[which(is.na(data$fertility_rate))] = 0
-#   data$age = unlist(lapply(data$age,function(x){ ifelse(x != '80+', paste0(strsplit(x, '-')[[1]][1], '-', 
-#                                                                            as.numeric(strsplit(x, '-')[[1]][2])-1), x)}))
-#   data_f = copy(data)
-#   data_f$date = data_f$year
-#   data_f$gender = 'F'
-#   write_csv(data_f, path = paste0('data/fertility/peru_fertility_f.csv'))
-#   is_child_mortality_needed = 0
-#   process_children_all("peru", is_child_mortality_needed, data_f)
-#   
-#   process_fertility_plots("peru")
-# }
+
+# Peru
+process_number_children_peru <- function(){
+  # fathers
+  cat(sprintf("Processing number of children of fathers\n"))
+  data = readRDS('DATA/Peru/male_fertility.RDS')
+  data$y2013 = data$y2012
+  data$y2014 = data$y2012
+  data$y2015 = data$y2012
+  data$y2016 = data$y2015
+  data$y2017 = data$y2016
+  data$y2018 = data$y2016
+  data$y2019 = data$y2016
+  data = reshape2::melt(data, id.vars = c('ages'),
+                        variable.name = 'year', value.name = 'fertility_rate')
+  setnames(data, 'ages', 'age')
+  data$age = as.character(data$age)
+  data$age = gsub('[(]', '', data$age)
+  data$age = gsub('[]]', '', data$age)
+  data$year = as.character(data$year)
+  data$year = gsub('y', '', data$year)
+  data$fertility_rate[which(is.na(data$fertility_rate))] = 0
+  data$age = unlist(lapply(data$age,function(x){ ifelse(x != '80+', paste0(strsplit(x, '-')[[1]][1], '-',
+                                                                           as.numeric(strsplit(x, '-')[[1]][2])-1), x)}))
+  data$fertility_rate[data$age == "80+"] = 0
+  data_f = copy(data)
+  data_f$date = data_f$year
+  data_f$gender = 'M'
+  write_csv(data_f, path = paste0('DATA/fertility/peru_fertility_m_all.csv'))
+  process_children_father_80_plus("peru", data_f)
+  is_child_mortality_needed = 0
+  add_child_mortality(is_child_mortality_needed, "peru")
+
+  # mothers
+  cat(sprintf("Processing number of children of mothers\n"))
+  data = readRDS('DATA/Peru/female_fertility.RDS')
+  data$y2013 = data$y2012
+  data$y2014 = data$y2012
+  data$y2015 = data$y2012
+  data$y2016 = data$y2015
+  data$y2017 = data$y2016
+  data$y2018 = data$y2016
+  data$y2019 = data$y2016
+  data = reshape2::melt(data, id.vars = c('ages'),
+                        variable.name = 'year', value.name = 'fertility_rate')
+  setnames(data, 'ages', 'age')
+  data$age = as.character(data$age)
+  data$age = gsub('[(]', '', data$age)
+  data$age = gsub('[]]', '', data$age)
+  data$year = as.character(data$year)
+  data$year = gsub('y', '', data$year)
+  data$fertility_rate[which(is.na(data$fertility_rate))] = 0
+  data$age = unlist(lapply(data$age,function(x){ ifelse(x != '80+', paste0(strsplit(x, '-')[[1]][1], '-',
+                                                                           as.numeric(strsplit(x, '-')[[1]][2])-1), x)}))
+  data_f = copy(data)
+  data_f$date = data_f$year
+  data_f$gender = 'F'
+  write_csv(data_f, path = paste0('DATA/fertility/peru_fertility_f.csv'))
+  is_child_mortality_needed = 0
+  process_children_all("peru", is_child_mortality_needed, data_f)
+
+  process_fertility_plots("peru")
+}
 
 # Poland
 process_number_children_poland <- function(){
