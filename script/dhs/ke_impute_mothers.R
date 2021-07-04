@@ -124,9 +124,9 @@ all_fertility <- NULL
 for (y in 1:3){
   # Read in DHS data
   if (y != 3){
-    all_data <- readRDS("data/DHS/ke_mothers_14.RDS")
+    all_data <- readRDS("DATA/DHS/ke_mothers_14.RDS")
   } else {
-    all_data <- readRDS("data/DHS/ke_mothers_03.RDS")
+    all_data <- readRDS("DATA/DHS/ke_mothers_03.RDS")
   }
   
   all_data <- select(all_data, -mother_wi, -mother_bmi, -mother_smoking, -mother_anemia)
@@ -257,7 +257,7 @@ df_fertility <- data.frame(all_fertility)
 names(df_fertility) <- paste0("y", 2014 - 0:14)
 df_fertility$ages <- factor(exposure_years$label, levels = c("under 15", labels))
 
-saveRDS(df_fertility, file = "data/Kenya/female_fertility.RDS")
+saveRDS(df_fertility, file = "DATA/Kenya/female_fertility.RDS")
 
 p <- ggplot(df_fertility) + 
   geom_point(aes(ages, y2014, col = "2014")) + 

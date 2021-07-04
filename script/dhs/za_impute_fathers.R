@@ -120,7 +120,7 @@ age_spent <- function(row, y){
 
 #-----------------------------------------------------------------------------
 # Read in DHS data
-all_data <- readRDS("data/DHS/za_fathers_16.RDS")
+all_data <- readRDS("DATA/DHS/za_fathers_16.RDS")
 all_data <- select(all_data, - father_wi, -father_bmi, -father_smoking, -father_anemia)
 
 # Survey year
@@ -248,7 +248,7 @@ for (y in 1:3){
 df_fertility <- data.frame(all_fertility)
 names(df_fertility) <- paste0("y", year - 0:14)
 df_fertility$ages <- factor(exposure_years$label, levels = c("under 15", labels))
-saveRDS(df_fertility, file = "data/SouthAfrica/male_fertility.RDS")
+saveRDS(df_fertility, file = "DATA/SouthAfrica/male_fertility.RDS")
 
 p <- ggplot(df_fertility) + 
   geom_point(aes(ages, y2016, col = "2016")) + 
