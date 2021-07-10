@@ -702,7 +702,7 @@ process_children_father_england_wales = function(data_f){
                            data_f$fertility_rate[which(data_f$age == "60-64" & data_f$date %in% seq(2008,2012))])   
   
   children[70, 18:7] <- c( data_f$fertility_rate[which(data_f$age == "50-54" & data_f$date%in% seq(2002,2003))] ,
-                           data_f$fertility_rate[which(data_f$age == "55-59" & data_f$date%in% seq(2004, 20089))] ,
+                           data_f$fertility_rate[which(data_f$age == "55-59" & data_f$date%in% seq(2004, 2008))] ,
                            data_f$fertility_rate[which(data_f$age == "60-64" & data_f$date %in% seq(2009,2013))])   
   
   children[69, 18:6] <- c( data_f$fertility_rate[which(data_f$age == "50-54" & data_f$date%in% seq(2002,2004))] ,
@@ -718,7 +718,7 @@ process_children_father_england_wales = function(data_f){
                           data_f$fertility_rate[which(data_f$age == "60-64" & data_f$date %in% seq(2012,2016))]) 
   
   children[66, 18:3] <- c( data_f$fertility_rate[which(data_f$age == "45-49" & data_f$date == 2002)]  ,
-                           data_f$fertility_rate[which(data_f$age == "50-54" & data_f$date%in% seq(2005,2007))] ,
+                           data_f$fertility_rate[which(data_f$age == "50-54" & data_f$date%in% seq(2003,2007))] ,
                            data_f$fertility_rate[which(data_f$age == "55-59" & data_f$date%in% seq(2008, 2012))] ,
                            data_f$fertility_rate[which(data_f$age == "60-64" & data_f$date %in% seq(2013,2017))])
   
@@ -730,20 +730,20 @@ process_children_father_england_wales = function(data_f){
   children[64, 18:1] <- c( data_f$fertility_rate[which(data_f$age == "45-49" & data_f$date%in% seq(2002,2004))] ,
                            data_f$fertility_rate[which(data_f$age == "50-54" & data_f$date%in% seq(2005,2009))] ,
                            data_f$fertility_rate[which(data_f$age == "55-59" & data_f$date%in% seq(2010, 2014))] ,
-                           data_f$fertility_rate[which(data_f$age == "60-64" & data_f$date %in% seq(2015,2018))])
+                           data_f$fertility_rate[which(data_f$age == "60-64" & data_f$date %in% seq(2015,2019))])
   
   
   children[63, 18:1] <- c( data_f$fertility_rate[which(data_f$age == "45-49" & data_f$date%in% seq(2002,2005))] ,
                            data_f$fertility_rate[which(data_f$age == "50-54" & data_f$date%in% seq(2006,2010))]  ,
                            data_f$fertility_rate[which(data_f$age == "55-59" & data_f$date%in% seq(2011, 2015))] ,
-                           data_f$fertility_rate[which(data_f$age == "60-64" & data_f$date %in% seq(2016,2018))])
+                           data_f$fertility_rate[which(data_f$age == "60-64" & data_f$date %in% seq(2016,2019))])
   
   # A 62 year old would havefive year 
   # in 45-49 age year category in 2003 - 2007
   children[62, 18:1] <- c(data_f$fertility_rate[which(data_f$age == "45-49" & data_f$date %in% seq(2002, 2006))],
                           data_f$fertility_rate[which(data_f$age == "50-54" & data_f$date%in% seq(2007,2011))]  ,
                           data_f$fertility_rate[which(data_f$age == "55-59" & data_f$date%in% seq(2012, 2016))] ,
-                          data_f$fertility_rate[which(data_f$age == "60-64" & data_f$date %in% seq(2017,2018))])
+                          data_f$fertility_rate[which(data_f$age == "60-64" & data_f$date %in% seq(2017,2019))])
   # A 61 year old would have had 1 year in 40-44 year group in 2003 and five year
   # in 45-49 age year category in 2004 - 2008, 5 years in 50-54 age year category in 09-13
   children[61, 18:1] <- c(data_f$fertility_rate[which(data_f$age == "40-44" & data_f$date == 2002)], 

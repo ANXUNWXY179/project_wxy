@@ -148,7 +148,7 @@ process_children_mortality_england_wales = function(){
   names(data) = as.character(data[6,])
   data = data[7:nrow(data),c(1,17:20, (ncol(data)-3):ncol(data))]
   setnames(data, 1:ncol(data), c('year', 'nb_1-4', 'nb_5-9', 'nb_10-14', 'nb_1-15', '1-4', '5-9', '10-14', '1-15'))
-  data = data %>% filter(year >= '2003') 
+  data = data %>% filter(year >= '2002') 
   data = data[which(!is.na(data$`nb_1-4`)),]
   data2 = copy(data)
   data = do.call(cbind,lapply(data[,2:ncol(data)],as.numeric))
@@ -189,7 +189,7 @@ process_infant_mortality_england_wales = function(){
   child_m = read.csv('DATA/children/mortality_rate_england_wales.csv')
   data$year = as.character(data$year)
   data$mortality = as.numeric(as.character(data$mortality))/1e3 * 1e5
-  data = rbind(as.data.table(data) %>% filter(year >= 2003) %>% select(year, age, mortality), child_m)
+  data = rbind(as.data.table(data) %>% filter(year >= 2002) %>% select(year, age, mortality), child_m)
   data$mortality = as.numeric(data$mortality)
   write_csv(data, file = 'DATA/children/mortality_rate_all_england_wales.csv')
 }
@@ -204,31 +204,31 @@ process_child_mortality_england_wales = function(){
   # Assumes the child mortality from 16-17 is same as 15
   # Assumes the child mortality for 2019, 2020 is same as 2018
   # the child mortality is for per 100,000 children
-  child_20 = child[which(child$year == 2019),]
-  child_20$year = 2020
+  # child_20 = child[which(child$year == 2019),]
+  # child_20$year = 2020
   # child_20 = copy(child_19)
   # child_20$year = 2020
-  child = rbind(child,  child_20)
+  # child = rbind(child,  child_20)
   child$mortality = child$mortality /1e5
 
-  child_m_matrix[49:15,1] = child$mortality[which(child$year == 2020 & child$age == '0 year')]
-  child_m_matrix[50:16,2] = child$mortality[which(child$year == 2019 & child$age == '1-4 years')]
-  child_m_matrix[51:17,3] = child$mortality[which(child$year == 2018 & child$age == '1-4 years')]
-  child_m_matrix[52:18,4] = child$mortality[which(child$year == 2017 & child$age == '1-4 years')]
-  child_m_matrix[53:19,5] = child$mortality[which(child$year == 2016 & child$age == '1-4 years')]
-  child_m_matrix[54:20,6] = child$mortality[which(child$year == 2015 & child$age == '5-9 years')]
-  child_m_matrix[55:21,7] = child$mortality[which(child$year == 2014 & child$age == '5-9 years')]
-  child_m_matrix[56:22,8] = child$mortality[which(child$year == 2013 & child$age == '5-9 years')]
-  child_m_matrix[57:23,9] = child$mortality[which(child$year == 2012 & child$age == '5-9 years')]
-  child_m_matrix[58:24,10] = child$mortality[which(child$year == 2011 & child$age == '5-9 years')]
-  child_m_matrix[59:25,11] = child$mortality[which(child$year == 2010 & child$age == '10-14 years')]
-  child_m_matrix[60:26,12] = child$mortality[which(child$year == 2009 & child$age == '10-14 years')]
-  child_m_matrix[61:27,13] = child$mortality[which(child$year == 2008 & child$age == '10-14 years')]
-  child_m_matrix[62:28,14] = child$mortality[which(child$year == 2007 & child$age == '10-14 years')]
-  child_m_matrix[63:29,15] = child$mortality[which(child$year == 2006 & child$age == '10-14 years')]
-  child_m_matrix[64:30,16] = child$mortality[which(child$year == 2005 & child$age == '15 years')]
-  child_m_matrix[65:31,17] = child$mortality[which(child$year == 2004 & child$age == '15 years')]
-  child_m_matrix[66:32,18] = child$mortality[which(child$year == 2003 & child$age == '15 years')]
+  child_m_matrix[49:15,1] = child$mortality[which(child$year == 2019 & child$age == '0 year')]
+  child_m_matrix[50:16,2] = child$mortality[which(child$year == 2018 & child$age == '1-4 years')]
+  child_m_matrix[51:17,3] = child$mortality[which(child$year == 2017 & child$age == '1-4 years')]
+  child_m_matrix[52:18,4] = child$mortality[which(child$year == 2016 & child$age == '1-4 years')]
+  child_m_matrix[53:19,5] = child$mortality[which(child$year == 2015 & child$age == '1-4 years')]
+  child_m_matrix[54:20,6] = child$mortality[which(child$year == 2014 & child$age == '5-9 years')]
+  child_m_matrix[55:21,7] = child$mortality[which(child$year == 2013 & child$age == '5-9 years')]
+  child_m_matrix[56:22,8] = child$mortality[which(child$year == 2012 & child$age == '5-9 years')]
+  child_m_matrix[57:23,9] = child$mortality[which(child$year == 2011 & child$age == '5-9 years')]
+  child_m_matrix[58:24,10] = child$mortality[which(child$year == 2010 & child$age == '5-9 years')]
+  child_m_matrix[59:25,11] = child$mortality[which(child$year == 2009 & child$age == '10-14 years')]
+  child_m_matrix[60:26,12] = child$mortality[which(child$year == 2008 & child$age == '10-14 years')]
+  child_m_matrix[61:27,13] = child$mortality[which(child$year == 2007 & child$age == '10-14 years')]
+  child_m_matrix[62:28,14] = child$mortality[which(child$year == 2006 & child$age == '10-14 years')]
+  child_m_matrix[63:29,15] = child$mortality[which(child$year == 2005 & child$age == '10-14 years')]
+  child_m_matrix[64:30,16] = child$mortality[which(child$year == 2004 & child$age == '15 years')]
+  child_m_matrix[65:31,17] = child$mortality[which(child$year == 2003 & child$age == '15 years')]
+  child_m_matrix[66:32,18] = child$mortality[which(child$year == 2002 & child$age == '15 years')]
 
   child_m_matrix = as.data.frame(child_m_matrix)
   names(child_m_matrix) = paste0(seq(0:17)-1, 'years')

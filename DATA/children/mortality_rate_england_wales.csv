@@ -1,4 +1,5 @@
 year,age,mortality
+2002,1-4 years,22
 2003,1-4 years,24
 2004,1-4 years,21
 2005,1-4 years,21
@@ -16,6 +17,7 @@ year,age,mortality
 2017,1-4 years,13
 2018,1-4 years,13
 2019,1-4 years,12
+2002,5-9 years,11
 2003,5-9 years,10
 2004,5-9 years,9
 2005,5-9 years,9
@@ -33,6 +35,7 @@ year,age,mortality
 2017,5-9 years,7
 2018,5-9 years,7
 2019,5-9 years,6
+2002,10-14 years,14
 2003,10-14 years,13
 2004,10-14 years,12
 2005,10-14 years,12
@@ -50,6 +53,7 @@ year,age,mortality
 2017,10-14 years,8
 2018,10-14 years,8
 2019,10-14 years,8
+2002,15 years,1.3082402707996512
 2003,15 years,1.3849971205298837
 2004,15 years,1.44416918739058
 2005,15 years,1.1194423410682006

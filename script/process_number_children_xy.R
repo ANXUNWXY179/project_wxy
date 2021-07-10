@@ -145,7 +145,7 @@ process_number_children_england_wales <- function(){
   # d_2020$date = '2020'
   # d_2020 = copy(d_2019)
   # d_2020$date = '2020'
-  data_f = rbind(data_f,  d_2020)
+  # data_f = rbind(data_f,  d_2020)
   process_children_father_england_wales(data_f)
   is_child_mortality_needed = 1
   add_child_mortality(is_child_mortality_needed, "england_wales")
@@ -157,9 +157,9 @@ process_number_children_england_wales <- function(){
   data_f$fertility_rate <- data_f$rate/1000
   data_f$date = data_f$year
   data_f$gender = 'F'
-  d_2020 = data_f[which(data_f$date == '2019'),]
-  d_2020$date = '2020'
-  data_f = rbind(data_f, d_2020)
+  # d_2020 = data_f[which(data_f$date == '2019'),]
+  # d_2020$date = '2020'
+  # data_f = rbind(data_f, d_2020)
   # d_2020 = copy(d_2019)
   # d_2020$date = '2020'
   # data_f = rbind(data_f, d_2020)

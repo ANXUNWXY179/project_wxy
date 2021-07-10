@@ -138,7 +138,7 @@ process_england_wales_fertility = function(){
   names(data) = d_name
   data = data %>% filter(!is.na(ignore)) %>% select(-ignore)
   # change to 2003
-  data = data %>% filter(year >= '2003')
+  data = data %>% filter(year >= '2002')
   data = reshape2::melt(data, id.vars = c('year'), variable.name = 'age', value.name = 'rate')
   data$age = as.character(data$age)
   data$age = gsub(' to ','-', data$age)
@@ -157,7 +157,7 @@ process_england_wales_fertility = function(){
   pop = pop %>% filter(sex == 1, age %in% c(seq(20)-1, seq(60,90)))
   pop$year = as.character(pop$year)
   pop$year = gsub('population_', '',pop$year)
-  pop = pop %>% filter(year >= '2003')
+  pop = pop %>% filter(year >= '2002')
   pop_save = copy(pop)
   
   pop$age = ifelse(pop$age %in% seq(15,19), '15-19',
@@ -200,7 +200,7 @@ process_england_wales_fertility = function(){
   data = data[7:nrow(data),]
   names(data) = d_name
   data = data %>% filter(!is.na(year), !is.na(ignore))
-  data = data %>% filter(year >= '2003') %>% select(-ignore)
+  data = data %>% filter(year >= '2002') %>% select(-ignore)
   data = data[,-2]
   data = reshape2::melt(data, id.vars = c('year'), variable.name = 'age', value.name = 'value')
   data$age = as.character(data$age)
@@ -212,7 +212,6 @@ process_england_wales_fertility = function(){
   data$gender = 'F'
   data$country = 'England_Wales'
   data$value = as.numeric(data$value)
-  print("test")
   
   write_csv(data, path = 'DATA/fertility/england_births_f.csv')
   
@@ -233,7 +232,7 @@ process_england_wales_fertility = function(){
   pop = pop %>% group_by(age, sex, year) %>% mutate(pop_nb = sum(pop)) %>% ungroup() %>%
     select(-pop) %>% distinct()
   pop$year = gsub('population_', '',pop$year)
-  pop = pop %>% filter(year >= '2003')
+  pop = pop %>% filter(year >= '2002')
   pop$sex = ifelse(pop$sex == 1, 'M','F')
   setnames(pop, 'sex', 'gender')
   d_data = merge(data, pop, by = c('age', 'gender', 'year'))
