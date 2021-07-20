@@ -140,7 +140,7 @@ process_orphans_colombia = function(){
   #-excess_death, -total_covid19_deaths,
   write_csv(path = 'DATA/Colombia/all_data.csv', d_summary)
 
-  d_summary %>% filter(age != '0-14') %>% group_by(gender) %>% mutate(#excess1 = round(sum(excess)),
+  d_summary %>% filter(age != '0-19') %>% group_by(gender) %>% mutate(#excess1 = round(sum(excess)),
     deaths= round(sum(total_deaths)),
     orphans= round( sum( nb_orphans))) %>% ungroup()
 }
@@ -239,15 +239,15 @@ process_orphans_england_wales = function(){
   
   write_csv(path = 'DATA/England&Wales/england_wales_all_data.csv', d_summary)
   
-  # d_summary = d_summary %>% 
-  #   filter(age != '0-14') %>%
-  #   group_by(gender) %>% 
-  #   mutate(total_excess = as.integer(round(sum(excess))),
-  #          total_covid = as.integer(round(sum(covid19_deaths))),
-  #          total_max = as.integer(round(sum(nb_deaths))),
-  #          total_orphans = as.integer(round(sum(nb_orphans)))) %>% 
-  #   ungroup() %>% 
-  #   distinct()
+  d_summary = d_summary %>%
+    filter(age != '0-19') %>%
+    group_by(gender) %>%
+    mutate(total_excess = as.integer(round(sum(excess))),
+           total_covid = as.integer(round(sum(covid19_deaths))),
+           total_max = as.integer(round(sum(nb_deaths))),
+           total_orphans = as.integer(round(sum(nb_orphans)))) %>%
+    ungroup() %>%
+    distinct()
   
   print(d_summary)
 }
@@ -271,14 +271,13 @@ process_orphans_france = function(){
   # d_children$age = ifelse(d_children$age %in% c('90-99', '100-109'), '90+', d_children$age)
   # d_children = d_children %>% group_by(age, gender) %>% mutate(nb_c = mean(children)) %>%
   #   select(-children) %>% ungroup()%>%distinct()
-  d_merge$deaths_peryear = d_merge$X2015.2020/6  * 1000
   d_merge$gender = as.character(d_merge$gender)
   #d_children$gender = ifelse(d_children$gender == 'female', 'Female', 'Male')
 
  
   d_m1 = merge(d_merge, d_children, by = c('age', 'gender'))
   d_m1 = as.data.table(d_m1)
-  d_m1[, orphans := round(deaths_peryear * nb_c)]
+  d_m1[, orphans := round(death_2018 * nb_c)]
 
   d_m1 = d_m1%>% arrange(age)
   
@@ -300,16 +299,16 @@ process_orphans_france = function(){
     guides(fill=guide_legend(title="Sex of Parent"))
   ggsave(filename = "figures/orphans_all_age_france.pdf", p, width = 6, height = 5)
  
-  d_summary = d_m1 %>% select(age, gender, deaths_peryear, orphans)
+  d_summary = d_m1 %>% select(age, gender, death_2018, orphans)
   d_summary$age = as.character(d_summary$age)
   d_summary$age = ifelse(d_summary$age %in% c('70-74','75-79', '80-84','85-89', '90-94','95+'), '70+',
                          ifelse(d_summary$age %in% c('50-54','55-59','60-64','65-69'), '50-69',
                                 ifelse(d_summary$age %in% c('20-24','25-29', '30-34','35-39', '40-44','45-49'), '20-49','0-19')))
   d_summary = d_summary %>% group_by(age, gender) %>%
-    mutate(nb_deaths = as.integer(round((sum(deaths_peryear)))),
+    mutate(nb_deaths = as.integer(round((sum(death_2018)))),
            nb_orphans = as.integer(round(sum(orphans)))) %>%
     ungroup() %>%
-    select(-orphans, -deaths_peryear) %>%
+    select(-orphans, -death_2018) %>%
     distinct()
   d_summary = select(d_summary, age, gender,  nb_deaths, nb_orphans)
   write_csv(path = 'DATA/France/all_data.csv', d_summary)
@@ -664,7 +663,7 @@ process_orphans_malawi = function(){
   #-excess_death, -total_covid19_deaths,
   write_csv(path = 'DATA/Malawi/all_data.csv', d_summary)
   
-  d_summary %>% filter(age != '0-14') %>% group_by(gender) %>% mutate(#excess1 = round(sum(excess)),
+  d_summary %>% filter(age != '0-19') %>% group_by(gender) %>% mutate(#excess1 = round(sum(excess)),
     deaths= round(sum(total_deaths)),
     orphans= round( sum( nb_orphans))) %>% ungroup()
 
@@ -761,7 +760,7 @@ process_orphans_peru = function(){
   #-excess_death, -total_covid19_deaths,
   write_csv(path = 'DATA/Peru/all_data.csv', d_summary)
   
-  d_summary %>% filter(age != '0-14') %>% group_by(gender) %>% mutate(#excess1 = round(sum(excess)),
+  d_summary %>% filter(age != '0-19') %>% group_by(gender) %>% mutate(#excess1 = round(sum(excess)),
     deaths= round(sum(total_deaths)),
     orphans= round( sum( nb_orphans))) %>% ungroup()
   
@@ -810,7 +809,7 @@ process_orphans_poland = function(){
     mutate(max_deaths = as.integer(round((sum(deaths_2018)))),
            nb_orphans = as.integer(round(sum(orphans)))) %>% ungroup() %>%
     select(-orphans, -deaths_2018) %>%distinct()
-  write_csv(path = 'DATA/Spain/all_data.csv', d_summary)
+  write_csv(path = 'DATA/Poland/all_data.csv', d_summary)
   as.data.frame(d_summary %>% filter(age != '0-19') %>% group_by(gender) %>%
                   mutate(total_deaths= round(sum(max_deaths)),
                          orphans= round( sum( nb_orphans))) %>% ungroup())
@@ -968,7 +967,7 @@ process_orphans_south_africa = function(){
   #-excess_death, -total_covid19_deaths,
   write_csv(path = 'DATA/SouthAfrica/all_data.csv', d_summary)
   
-  d_summary %>% filter(age != '0-14') %>% group_by(gender) %>% mutate(#excess1 = round(sum(excess)),
+  d_summary %>% filter(age != '0-19') %>% group_by(gender) %>% mutate(#excess1 = round(sum(excess)),
     deaths= round(sum(total_deaths)),
     orphans= round( sum( nb_orphans))) %>% ungroup()
   
