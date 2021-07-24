@@ -333,6 +333,14 @@ mother = mother %>% filter(!year %in% c('2000', '2001',NA))
 mother = mother %>% filter(!age %in% c('50-54', '55-59', '60-64',
                                        '65-69', '70-74', '75-79',
                                        '80+',  '65+', '55+'))
+
+father<-data[data$gender=='Male',]
+father = father %>% filter(!year %in% c('2000', '2001',NA))
+
+#mother = mother %>% filter(!age %in% c('50-54', '55-59', '60-64',
+ #                                      '65-69', '70-74', '75-79',
+  #                                     '80+',  '65+', '55+'))
+
 p1 <- ggplot(mother) +
   geom_point(aes(x = age, y = fertility_rate, color = year)) +
   facet_wrap(~country, scales = "free_x", ncol = 3) +  
@@ -343,33 +351,50 @@ p1 <- ggplot(mother) +
         plot.margin=unit(c(1,1,0,1), "cm")) +
   xlab("Age") + ylab("Fertility Rate per 1000 women") + labs(fill = "Year") + labs(tag = "A")
 
-
-
-p2 <- ggplot(data %>% filter(age != "0-19")) +
-  geom_col(aes(age, orphans/deaths, fill = gender), position = "dodge") +
-  geom_hline(yintercept = 1, alpha = 0.8, col = "grey") + 
-  facet_wrap(~country, scales = "free_x", ncol = 4) +  
+p1
+p2 <- ggplot(father) +
+  geom_point(aes(x = age, y = fertility_rate, color = year)) +
+  facet_wrap(~country, scales = "free_x", ncol = 3) +  
   theme_bw() + 
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5),
         legend.position="bottom",
         strip.background =element_rect(fill="white"),
         plot.margin=unit(c(1,1,0,1), "cm")) +
-  xlab("Age") + ylab("Ratio of orphans to parental deaths") + labs(fill = "Sex of parent") + 
-  labs(tag = "B")
+  xlab("Age") + ylab("Fertility Rate per 1000 men") + labs(fill = "Year") + labs(tag = "B")
 
 
-ggplot(data_combine) +
-  geom_point(aes(x = age, y = fertility_rate, color = year)) +
-  theme_bw()+
-  theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1)) +
-  guides(col = guide_legend(nrow = 7)) +
-  labs(x = 'Age') +
-  facet_wrap(~ gender,
-             strip.position = "left",
-             labeller = as_labeller(c(Female = "Fertility Rate per 1000 women",
-                                      Male = "Fertility Rate per 1000 men") ) ) +
-  theme(strip.background =element_rect(fill="white")) +
-  ylab(NULL) +
-  theme(strip.background = element_blank(),
-        strip.placement = "outside")
-ggsave(paste0("figures/fertility_",country, ".pdf"), width = 10, height = 4)
+cowplot::save_plot("figures/fertility_female.pdf", p1, base_height = 15, base_width = 10)
+cowplot::save_plot("figures/fertility_male.pdf", p2, base_height = 15, base_width = 10)
+
+
+
+
+# p2 <- ggplot(data %>% filter(age != "0-19")) +
+#   geom_col(aes(age, orphans/deaths, fill = gender), position = "dodge") +
+#   geom_hline(yintercept = 1, alpha = 0.8, col = "grey") + 
+#   facet_wrap(~country, scales = "free_x", ncol = 4) +  
+#   theme_bw() + 
+#   theme(axis.text.x = element_text(angle = 45, vjust = 0.5),
+#         legend.position="bottom",
+#         strip.background =element_rect(fill="white"),
+#         plot.margin=unit(c(1,1,0,1), "cm")) +
+#   xlab("Age") + ylab("Ratio of orphans to parental deaths") + labs(fill = "Sex of parent") + 
+#   labs(tag = "B")
+# 
+# 
+# 
+# ggplot(data_combine) +
+#   geom_point(aes(x = age, y = fertility_rate, color = year)) +
+#   theme_bw()+
+#   theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1)) +
+#   guides(col = guide_legend(nrow = 7)) +
+#   labs(x = 'Age') +
+#   facet_wrap(~ gender,
+#              strip.position = "left",
+#              labeller = as_labeller(c(Female = "Fertility Rate per 1000 women",
+#                                       Male = "Fertility Rate per 1000 men") ) ) +
+#   theme(strip.background =element_rect(fill="white")) +
+#   ylab(NULL) +
+#   theme(strip.background = element_blank(),
+#         strip.placement = "outside")
+# ggsave(paste0("figures/fertility_",country, ".pdf"), width = 10, height = 4)

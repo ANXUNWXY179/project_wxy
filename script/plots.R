@@ -11,7 +11,7 @@ library(gridExtra)
 # names(brazil) <- c("age", "gender", "deaths", "orphans")
 # brazil$country <- rep("Brazil", length(brazil$age))
 
-colombia <- read.csv("data/Colombia/all_data.csv", stringsAsFactors = FALSE)
+colombia <- read.csv("DATA/Colombia/all_data.csv", stringsAsFactors = FALSE)
 names(colombia) <- c("age", "gender", "deaths", "orphans")
 colombia$country <- rep("Colombia", length(colombia$age))
 
