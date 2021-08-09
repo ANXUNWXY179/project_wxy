@@ -45,10 +45,10 @@ italy_f$country <- rep("Italy", length(italy_f$age))
 # kenya_f <- read.csv("DATA/children/kenya_f.csv")
 # kenya_f$country <- rep("Kenya", length(kenya_f$age))
 # 
-# malawi_m <- read.csv("DATA/children/malawi_m.csv")
-# malawi_m$country <- rep("Malawi", length(malawi_m$age))
-# malawi_f <- read.csv("DATA/children/malawi_f.csv")
-# malawi_f$country <- rep("Malawi", length(malawi_f$age))
+malawi_m <- read.csv("DATA/children/malawi_m.csv")
+malawi_m$country <- rep("Malawi", length(malawi_m$age))
+malawi_f <- read.csv("DATA/children/malawi_f.csv")
+malawi_f$country <- rep("Malawi", length(malawi_f$age))
 
 mexico_m <- read.csv("DATA/children/mexico_m.csv")
 mexico_m$country <- rep("Mexico", length(mexico_m$age))
@@ -100,6 +100,7 @@ data = rbind(colombia_m, colombia_f,
              france_m, france_f,
              germany_m, germany_f,
              italy_m, italy_f,
+             malawi_m,malawi_f,
              mexico_m, mexico_f,
              peru_m, peru_f,
              poland_m, poland_f,

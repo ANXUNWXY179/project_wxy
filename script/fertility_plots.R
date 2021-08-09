@@ -180,6 +180,9 @@ malawi_mother = malawi_mother %>% select(year, age, gender, fertility_rate)
 malawi_combine = rbind(malawi_father, malawi_mother)
 malawi_combine$year = as.character(malawi_combine$year)
 malawi_combine$country <- rep("Malawi", length(malawi_combine$age))
+malawi_combine=data.table(malawi_combine)
+malawi_combine[,fertility_rate:= fertility_rate *1000]
+
 
 #########################################################################################################
 
