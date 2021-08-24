@@ -397,7 +397,7 @@ compare_fertility_germany = function(){
                                              age != 'Unknown - Inconnu',
                                              gender == 'Female')
   
-  data_pop = readxl::read_xlsx('DATA/pop.xlsx', sheet = 2)
+  data_pop = readxl::read_xlsx('DATA/fertility_update/pop.xlsx', sheet = 2)
   countries = c('Germany')
   names(data_pop) = as.character(data_pop[1,])
   # data (thousand)
